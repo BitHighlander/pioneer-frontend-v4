@@ -16,12 +16,11 @@ const HeaderNew = () => {
       alignItems="center"
       justifyContent="space-between" // Align items with space between them
       p={5}
-      bg="gray.900" // change background color
-      borderBottom="1px solid" // add a border at the bottom
       borderColor="gray.200" // set border color
       zIndex={4}
     >
       <HStack spacing={8}>
+        <br />
         <RouterLink to="/">
           <Box>
             <Text fontSize="3xl">{PROJECT_NAME}</Text>
