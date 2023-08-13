@@ -1,18 +1,18 @@
-import React from 'react';
-import SubmitAssetsForm from './AssetForm';
+import React from "react";
+import SubmitAssetsForm from "./AssetForm";
 
 const YourComponent = () => {
   const initialAsset = {
-    name: '',
-    type: 'btc',
-    image: '',
-    caip: '',
-    symbol: '',
-    decimals: '',
-    blockchain: '',
+    name: "",
+    type: "btc",
+    image: "",
+    caip: "",
+    symbol: "",
+    decimals: "",
+    blockchain: "",
     facts: [],
     tags: [],
-    explorer: '',
+    explorer: "",
   };
 
   const handleSubmit = async (asset) => {

@@ -1,8 +1,19 @@
-import { Box, Heading, Button, Card, CardBody, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import React from 'react';
-import DiscoverdBlockchains from './components/BlockchainsDiscovered';
-import ChartedBlockchains from './components/Blockchains';
-import SubmitBlockchains from './components/ChartBlockchain';
+import {
+  Box,
+  Heading,
+  Button,
+  Card,
+  CardBody,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
+import React from "react";
+import DiscoverdBlockchains from "./components/BlockchainsDiscovered";
+import ChartedBlockchains from "./components/Blockchains";
+import SubmitBlockchains from "./components/ChartBlockchain";
 
 const Header = () => (
   <Box textAlign="center">

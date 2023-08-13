@@ -1,18 +1,18 @@
-import React from 'react';
-import SubmitAssetsForm from './NodeForm';
+import React from "react";
+import SubmitAssetsForm from "./NodeForm";
 
 const ChartNode = () => {
   const initialAsset = {
-    name: '',
-    type: 'btc',
-    image: '',
-    caip: '',
-    symbol: '',
-    decimals: '',
-    blockchain: '',
+    name: "",
+    type: "btc",
+    image: "",
+    caip: "",
+    symbol: "",
+    decimals: "",
+    blockchain: "",
     facts: [],
     tags: [],
-    explorer: '',
+    explorer: "",
   };
 
   const handleSubmit = async (asset) => {

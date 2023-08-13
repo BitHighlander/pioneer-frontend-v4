@@ -1,16 +1,23 @@
-import { FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Button } from '@chakra-ui/react';
-import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { ethers } from 'ethers';
+import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+  Input,
+  Button,
+} from "@chakra-ui/react";
+import React from "react";
+import { v4 as uuidv4 } from "uuid";
+import { ethers } from "ethers";
 // import { useAlert } from 'react-alert'
-import { usePioneer } from 'pioneer-react';
+import { usePioneer } from "pioneer-react";
 
 const SubmitBlockchains = () => {
   const { state } = usePioneer();
   const { api, user, wallet } = state;
-  const [name, setName] = React.useState('');
-  const [app, setApp] = React.useState('');
-  const [image, setImage] = React.useState('');
+  const [name, setName] = React.useState("");
+  const [app, setApp] = React.useState("");
+  const [image, setImage] = React.useState("");
 
   const handleInputChangeName = (e: any) => setName(e.target.value);
   const handleInputChangeApp = (e: any) => setApp(e.target.value);
@@ -21,15 +28,15 @@ const SubmitBlockchains = () => {
 
   const onSubmit = async function () {
     try {
-      console.log('name: ', name);
-      console.log('app: ', app);
-      console.log('image: ', image);
+      console.log("name: ", name);
+      console.log("app: ", app);
+      console.log("image: ", image);
 
       const dapp: any = {};
       dapp.name = name;
       dapp.app = app;
       dapp.image = image;
-      dapp.tags = ['ethereum'];
+      dapp.tags = ["ethereum"];
 
       let payload: any = {
         name,
@@ -39,20 +46,20 @@ const SubmitBlockchains = () => {
 
       const addressInfo = {
         addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-        coin: 'Ethereum',
-        scriptType: 'ethereum',
+        coin: "Ethereum",
+        scriptType: "ethereum",
         showDisplay: false,
       };
       const address = await wallet.ethGetAddress(addressInfo);
       const update: any = {};
 
-      if (!address) throw Error('Onbord not setup! no address ');
+      if (!address) throw Error("Onbord not setup! no address ");
       const signature = await wallet.ethSignMessage({
         addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
         message: payload,
       });
-      dapp.protocol = ['wallet-connect-v1'];
-      dapp.version = 'wc-1';
+      dapp.protocol = ["wallet-connect-v1"];
+      dapp.version = "wc-1";
       dapp.developer = address.toLowerCase();
       dapp.signer = address.toLowerCase();
       dapp.payload = payload;
@@ -70,17 +77,31 @@ const SubmitBlockchains = () => {
       <FormControl isInvalid={isError}>
         <FormLabel>Name</FormLabel>
         <Input type="email" value={name} onChange={handleInputChangeName} />
-        {!isError ? <FormHelperText>Enter the name of the blockchain.</FormHelperText> : <FormErrorMessage>blockchain is required.</FormErrorMessage>}
+        {!isError ? (
+          <FormHelperText>Enter the name of the blockchain.</FormHelperText>
+        ) : (
+          <FormErrorMessage>blockchain is required.</FormErrorMessage>
+        )}
       </FormControl>
       <FormControl isInvalid={isError}>
         <FormLabel>Explorer URL</FormLabel>
         <Input type="email" value={app} onChange={handleInputChangeApp} />
-        {!isError ? <FormHelperText>Enter the URL of the explorer</FormHelperText> : <FormErrorMessage>URL is required.</FormErrorMessage>}
+        {!isError ? (
+          <FormHelperText>Enter the URL of the explorer</FormHelperText>
+        ) : (
+          <FormErrorMessage>URL is required.</FormErrorMessage>
+        )}
       </FormControl>
       <FormControl isInvalid={isError}>
         <FormLabel>Image URL</FormLabel>
         <Input type="email" value={image} onChange={handleInputChangeImage} />
-        {!isError ? <FormHelperText>Enter the URL of image for the blockchain</FormHelperText> : <FormErrorMessage>image URL is required.</FormErrorMessage>}
+        {!isError ? (
+          <FormHelperText>
+            Enter the URL of image for the blockchain
+          </FormHelperText>
+        ) : (
+          <FormErrorMessage>image URL is required.</FormErrorMessage>
+        )}
       </FormControl>
       <Button
         mt={4}

@@ -1,35 +1,55 @@
-import { Card, CardBody, Popover, PopoverTrigger, PopoverContent, PopoverBody, InputGroup, Spinner, InputLeftAddon, FormControl, Textarea, FormLabel, FormHelperText, Input, Button, Box, FormErrorMessage } from '@chakra-ui/react';
-import { Steps, Step } from 'chakra-ui-steps';
-import React, { useEffect, useState } from 'react';
-import Select from 'react-select';
-import { usePioneer } from 'pioneer-react';
-import { protocols, features } from './Constants';
-import { Select as SelectImported, components } from 'chakra-react-select';
-import {useNavigate} from "react-router-dom";
+import {
+  Card,
+  CardBody,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverBody,
+  InputGroup,
+  Spinner,
+  InputLeftAddon,
+  FormControl,
+  Textarea,
+  FormLabel,
+  FormHelperText,
+  Input,
+  Button,
+  Box,
+  FormErrorMessage,
+} from "@chakra-ui/react";
+import { Steps, Step } from "chakra-ui-steps";
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+import { usePioneer } from "pioneer-react";
+import { protocols, features } from "./Constants";
+import { Select as SelectImported, components } from "chakra-react-select";
+import { useNavigate } from "react-router-dom";
 const SubmitDapps = ({ onTabChange }) => {
   const { state } = usePioneer();
   const { api, user, wallet } = state;
-  const [name, setName] = useState('');
-  const [app, setApp] = useState('');
-  const [image, setImage] = useState('');
-  const [url, setUrl] = useState('');
+  const [name, setName] = useState("");
+  const [app, setApp] = useState("");
+  const [image, setImage] = useState("");
+  const [url, setUrl] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [description, setDescription] = useState('');
-  const [minVersion, setMinVersion] = useState('');
-  const [homepage, setHomepage] = useState('');
-  const [urlError, setUrlError] = useState('');
-  const [homepageError, setHomepageError] = useState('');
+  const [description, setDescription] = useState("");
+  const [minVersion, setMinVersion] = useState("");
+  const [homepage, setHomepage] = useState("");
+  const [urlError, setUrlError] = useState("");
+  const [homepageError, setHomepageError] = useState("");
   const [blockchainsSupported, setBlockchainsSupported] = useState([]);
-  const [protocolsSupported, setProtocolsSupported] = useState<any[]>(['wallet-connect']);
-  const [featuresSupported, setFeaturesSupported] = useState(['other']);
+  const [protocolsSupported, setProtocolsSupported] = useState<any[]>([
+    "wallet-connect",
+  ]);
+  const [featuresSupported, setFeaturesSupported] = useState(["other"]);
   const [activeStep, setActiveStep] = useState(0);
   const [isRest, setIsRest] = React.useState(false);
   const [blockchains, setBlockchains] = React.useState([]);
   const [socialMedia, setSocialMedia] = useState({
-    twitter: '',
-    telegram: '',
-    github: '',
+    twitter: "",
+    telegram: "",
+    github: "",
   });
   const navigate = useNavigate();
   const handleInputChangeName = (e) => setName(e.target.value);
@@ -67,7 +87,9 @@ const SubmitDapps = ({ onTabChange }) => {
   };
 
   const handleSelectedProtocols = (selectedOptions) => {
-    const selectedProtocolValues = selectedOptions.map((option) => option.value);
+    const selectedProtocolValues = selectedOptions.map(
+      (option) => option.value
+    );
     setProtocolsSupported(selectedProtocolValues);
   };
 
@@ -80,40 +102,42 @@ const SubmitDapps = ({ onTabChange }) => {
   const onSubmitName = async () => {
     // Submit logic
     try {
-      console.log('homepage: ', homepage);
-      console.log('app: ', app);
-      console.log('api: ', api);
-      if (!api) alert('Failed to load API, reload application');
+      console.log("homepage: ", homepage);
+      console.log("app: ", app);
+      console.log("api: ", api);
+      if (!api) alert("Failed to load API, reload application");
       if (!app) setApp(homepage);
       if (!homepage) setHomepage(app);
       const input = {
         app,
         homepage,
       };
-      console.log('input: ', input);
+      console.log("input: ", input);
 
       const result = await api.SubmitUrl(input);
-      console.log('result: ', result.data);
+      console.log("result: ", result.data);
       if (result.data) {
         // Filter out protocols that are not supported
         if (result.data.protocols) {
-          const supportedProtocols = Object.keys(result.data.protocols).filter((key) => result.data.protocols[key]);
+          const supportedProtocols = Object.keys(result.data.protocols).filter(
+            (key) => result.data.protocols[key]
+          );
           const formatedProtocols: any = [];
-          console.log('supportedProtocols: ', supportedProtocols);
+          console.log("supportedProtocols: ", supportedProtocols);
           for (let i = 0; i < supportedProtocols.length; i++) {
             formatedProtocols.push({
               label: supportedProtocols[i],
               value: supportedProtocols[i],
             });
           }
-          console.log('formatedProtocols: ', formatedProtocols);
+          console.log("formatedProtocols: ", formatedProtocols);
           setProtocolsSupported(formatedProtocols);
         }
 
         // Convert CSV string to array for blockchains
         if (result.data.blockchains) {
-          const blockchainArray = result.data.blockchains.split(',');
-          console.log('blockchainArray: ', blockchainArray);
+          const blockchainArray = result.data.blockchains.split(",");
+          console.log("blockchainArray: ", blockchainArray);
 
           const supportedBlockchains = [];
           for (let i = 0; i < blockchainArray.length; i++) {
@@ -122,19 +146,22 @@ const SubmitDapps = ({ onTabChange }) => {
             //filter where name is included in blockchains{name}
             // @ts-ignore
             //let matchedEntries = blockchains.filter(blockchain => blockchain.name.toLowerCase().includes(name))
-            const matchedEntries = blockchains.filter((blockchain) => blockchain.name.includes(name));
+            const matchedEntries = blockchains.filter((blockchain) =>
+              // @ts-ignore
+              blockchain.name.includes(name)
+            );
 
             // Push each matched entry to supportedBlockchains array
             matchedEntries.forEach((entry) => supportedBlockchains.push(entry));
           }
           //create
-          console.log('supportedBlockchains: ', supportedBlockchains);
+          console.log("supportedBlockchains: ", supportedBlockchains);
           onSelectedBlockchains(supportedBlockchains);
         }
 
         // Convert CSV string to array for blockchains
         if (result.data.features) {
-          const featuresArray = result.data.features.split(',');
+          const featuresArray = result.data.features.split(",");
           const featuresFormatted: any = [];
           for (let i = 0; i < featuresArray.length; i++) {
             featuresFormatted.push({
@@ -142,24 +169,24 @@ const SubmitDapps = ({ onTabChange }) => {
               value: featuresArray[i],
             });
           }
-          console.log('featuresFormatted: ', featuresFormatted);
+          console.log("featuresFormatted: ", featuresFormatted);
           setProtocolsSupported(featuresFormatted);
         }
         setName(result.data.name);
         setDescription(result.data.description);
         setImage(result.data.image);
-        if(result.data.features)setFeaturesSupported(result.data.features);
+        if (result.data.features) setFeaturesSupported(result.data.features);
         // @ts-ignore
       }
       setIsLoading(false);
       if (result.data.name) {
         return true;
       } else {
-        alert('Invalid URL unable to load app');
+        alert("Invalid URL unable to load app");
         return false;
       }
     } catch (e) {
-      console.error('submit error: ', e);
+      console.error("submit error: ", e);
       setIsLoading(false);
       return false;
     }
@@ -173,7 +200,7 @@ const SubmitDapps = ({ onTabChange }) => {
         setActiveStep((prevStep) => prevStep + 1);
       }
     } else {
-      console.log('Must submit first!');
+      console.log("Must submit first!");
     }
   };
 
@@ -184,7 +211,7 @@ const SubmitDapps = ({ onTabChange }) => {
   const onSubmit = async () => {
     // Submit logic
     try {
-      console.log('onSubmit()');
+      console.log("onSubmit()");
       setIsLoading(true);
       //convert blockchains protocols and features to array of strings
       const blockchainsSupportedArray = [];
@@ -197,7 +224,7 @@ const SubmitDapps = ({ onTabChange }) => {
         // @ts-ignore
         protocolsSupportedArray.push(protocolsSupported[i].value);
       }
-      let featuresSupportedArray = [];
+      const featuresSupportedArray = [];
       for (let i = 0; i < featuresSupported.length; i++) {
         // @ts-ignore
         featuresSupportedArray.push(featuresSupported[i].value);
@@ -207,7 +234,11 @@ const SubmitDapps = ({ onTabChange }) => {
       dapp.name = name;
       dapp.app = app;
       dapp.homepage = app;
-      dapp.tags = [...blockchainsSupportedArray, ...protocolsSupportedArray, ...featuresSupportedArray];
+      dapp.tags = [
+        ...blockchainsSupportedArray,
+        ...protocolsSupportedArray,
+        ...featuresSupportedArray,
+      ];
       dapp.image = image;
       dapp.minVersion = minVersion;
       dapp.description = description;
@@ -223,17 +254,17 @@ const SubmitDapps = ({ onTabChange }) => {
       };
       payload = JSON.stringify(payload);
 
-      console.log('payload: ', payload);
-      console.log('wallet: ', wallet);
+      console.log("payload: ", payload);
+      console.log("wallet: ", wallet);
       const signature = await wallet.ethSignMessage({
         addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
         message: payload,
       });
-      console.log('signature: ', signature);
+      console.log("signature: ", signature);
       const addressInfo = {
         addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-        coin: 'Ethereum',
-        scriptType: 'ethereum',
+        coin: "Ethereum",
+        scriptType: "ethereum",
         showDisplay: false,
       };
       const address = await wallet.ethGetAddress(addressInfo);
@@ -241,15 +272,15 @@ const SubmitDapps = ({ onTabChange }) => {
       dapp.signer = address;
       dapp.payload = payload;
       dapp.signature = signature.signature;
-      console.log('dapp: ', dapp);
+      console.log("dapp: ", dapp);
       const txInfo = await api.ChartDapp(dapp);
-      console.log('SUCCESS: ', txInfo.data);
+      console.log("SUCCESS: ", txInfo.data);
       setIsLoading(false);
       if (txInfo.data.success) {
         // Navigate to the modified URL
         handleGoBackToReview();
         //show success message
-        console.log('SUCCESS: ', txInfo.data);
+        console.log("SUCCESS: ", txInfo.data);
         //open dapps tab with app searched
         const specialCharPattern = /[^a-zA-Z0-9]+/; // Regular expression to match any non-alphanumeric character
         const nameWithoutSpecialChars = name.split(specialCharPattern)[0]; // "stargate"
@@ -266,13 +297,16 @@ const SubmitDapps = ({ onTabChange }) => {
 
   const onSelectedBlockchains = async function (inputs: any) {
     try {
-      console.log('input: onSelectedBlockchains: ', inputs);
+      console.log("input: onSelectedBlockchains: ", inputs);
       const blockchains: any = [];
       for (let i = 0; i < inputs.length; i++) {
         const input = inputs[i];
-        blockchains.push({ value: input.name || input.value, label: input.name || input.label });
+        blockchains.push({
+          value: input.name || input.value,
+          label: input.name || input.label,
+        });
       }
-      console.log('supportedBlockchains: ', blockchains);
+      console.log("supportedBlockchains: ", blockchains);
       setBlockchainsSupported(blockchains);
     } catch (e) {
       console.error(e);
@@ -281,13 +315,16 @@ const SubmitDapps = ({ onTabChange }) => {
 
   const onSelectedProtocols = async function (inputs: any) {
     try {
-      console.log('input: onSelectedProtocols: ', inputs);
+      console.log("input: onSelectedProtocols: ", inputs);
       const protocols: any = [];
       for (let i = 0; i < inputs.length; i++) {
         const input = inputs[i];
-        protocols.push({ value: input.name || input.value, label: input.name || input.label });
+        protocols.push({
+          value: input.name || input.value,
+          label: input.name || input.label,
+        });
       }
-      console.log('protocols: ', protocols);
+      console.log("protocols: ", protocols);
       setProtocolsSupported(protocols);
     } catch (e) {
       console.error(e);
@@ -296,7 +333,7 @@ const SubmitDapps = ({ onTabChange }) => {
 
   const onSelectedFeatures = async function (input: any) {
     try {
-      console.log('input: onSelectedFeatures: ', input);
+      console.log("input: onSelectedFeatures: ", input);
       setFeaturesSupported(input);
     } catch (e) {
       console.error(e);
@@ -306,13 +343,13 @@ const SubmitDapps = ({ onTabChange }) => {
   // simple url validation
   const validateURL = (text) => {
     const pattern = new RegExp(
-      '^(https?:\\/\\/)?' + // protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-z\\d_]*)?$',
-      'i'
+      "^(https?:\\/\\/)?" + // protocol
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+        "(\\#[-a-z\\d_]*)?$",
+      "i"
     ); // fragment locator
     return !!pattern.test(text);
   };
@@ -320,9 +357,12 @@ const SubmitDapps = ({ onTabChange }) => {
   const onStart = async function () {
     try {
       if (api) {
-        let blockchains = await api.SearchBlockchainsPaginate({ limit: 1000, skip: 0 });
+        let blockchains = await api.SearchBlockchainsPaginate({
+          limit: 1000,
+          skip: 0,
+        });
         blockchains = blockchains.data;
-        console.log('blockchains: ', blockchains.length);
+        console.log("blockchains: ", blockchains.length);
         const blockchainsFormated: any = [];
         for (let i = 0; i < blockchains.length; i++) {
           const blockchain = blockchains[i];
@@ -361,24 +401,32 @@ const SubmitDapps = ({ onTabChange }) => {
                 ) : (
                   <>
                     <div>
-                      <Popover isOpen={Boolean(urlError)} onClose={() => setUrlError('')}>
+                      <Popover
+                        isOpen={Boolean(urlError)}
+                        onClose={() => setUrlError("")}
+                      >
                         <PopoverTrigger>
                           <div> {/* Trigger element */}</div>
                         </PopoverTrigger>
                         <PopoverContent>
                           <PopoverBody>
-                            <div style={{ padding: '10px' }}>{urlError}</div>
+                            <div style={{ padding: "10px" }}>{urlError}</div>
                           </PopoverBody>
                         </PopoverContent>
                       </Popover>
 
-                      <Popover isOpen={Boolean(homepageError)} onClose={() => setHomepageError('')}>
+                      <Popover
+                        isOpen={Boolean(homepageError)}
+                        onClose={() => setHomepageError("")}
+                      >
                         <PopoverTrigger>
                           <div> {/* Trigger element */}</div>
                         </PopoverTrigger>
                         <PopoverContent>
                           <PopoverBody>
-                            <div style={{ padding: '10px' }}>{homepageError}</div>
+                            <div style={{ padding: "10px" }}>
+                              {homepageError}
+                            </div>
                           </PopoverBody>
                         </PopoverContent>
                       </Popover>
@@ -386,24 +434,69 @@ const SubmitDapps = ({ onTabChange }) => {
                     <div>
                       <FormControl isInvalid={isError}>
                         <FormLabel>Homepage URL</FormLabel>
-                        <Input type="email" value={homepage} onChange={handleInputChangeHomepage} />
-                        {!isError ? <FormHelperText>Homepage is the Landing, generally designed to be indexed by crawlers.</FormHelperText> : <FormErrorMessage>Homepage URL is required.</FormErrorMessage>}
+                        <Input
+                          type="email"
+                          value={homepage}
+                          onChange={handleInputChangeHomepage}
+                        />
+                        {!isError ? (
+                          <FormHelperText>
+                            Homepage is the Landing, generally designed to be
+                            indexed by crawlers.
+                          </FormHelperText>
+                        ) : (
+                          <FormErrorMessage>
+                            Homepage URL is required.
+                          </FormErrorMessage>
+                        )}
                       </FormControl>
                     </div>
                     <div>
                       <FormControl isInvalid={isError}>
                         <FormLabel>App URL</FormLabel>
-                        <Input type="email" value={app} onChange={handleInputChangeApp} />
-                        {!isError ? <FormHelperText>{'(optional) Enter the URL of the dapp application itself, generally app.serviceName*.com'}</FormHelperText> : <FormErrorMessage>App URL is required.</FormErrorMessage>}
+                        <Input
+                          type="email"
+                          value={app}
+                          onChange={handleInputChangeApp}
+                        />
+                        {!isError ? (
+                          <FormHelperText>
+                            {
+                              "(optional) Enter the URL of the dapp application itself, generally app.serviceName*.com"
+                            }
+                          </FormHelperText>
+                        ) : (
+                          <FormErrorMessage>
+                            App URL is required.
+                          </FormErrorMessage>
+                        )}
                       </FormControl>
                     </div>
                     <div>
                       <FormLabel>Description</FormLabel>
                       <FormControl>
-                        <textarea rows={2} cols={50} placeholder="(optional) Describe why this app is useful and relevant." value={description} onChange={handleDescriptionChange}></textarea>
+                        <textarea
+                          rows={2}
+                          cols={50}
+                          placeholder="(optional) Describe why this app is useful and relevant."
+                          value={description}
+                          onChange={handleDescriptionChange}
+                        ></textarea>
                       </FormControl>
                     </div>
-                    <Button onClick={onNext} disabled={activeStep === 0} padding="10px 20px" borderRadius="5px" backgroundColor={activeStep === 0 ? 'gray' : 'blue'} color="white" boxShadow="0px 2px 4px rgba(0, 0, 0, 0.3)" textTransform="uppercase" fontWeight="bold" transition="background-color 0.3s ease" cursor={activeStep === 0 ? 'not-allowed' : 'pointer'}>
+                    <Button
+                      onClick={onNext}
+                      disabled={activeStep === 0}
+                      padding="10px 20px"
+                      borderRadius="5px"
+                      backgroundColor={activeStep === 0 ? "gray" : "blue"}
+                      color="white"
+                      boxShadow="0px 2px 4px rgba(0, 0, 0, 0.3)"
+                      textTransform="uppercase"
+                      fontWeight="bold"
+                      transition="background-color 0.3s ease"
+                      cursor={activeStep === 0 ? "not-allowed" : "pointer"}
+                    >
                       Next
                     </Button>
                   </>
@@ -415,31 +508,94 @@ const SubmitDapps = ({ onTabChange }) => {
             <div>
               <FormControl isInvalid={isError}>
                 <FormLabel>Name</FormLabel>
-                <Input type="email" value={name} onChange={handleInputChangeName} />
-                {!isError ? <FormHelperText>Enter the name of the app.</FormHelperText> : <FormErrorMessage>name is required.</FormErrorMessage>}
+                <Input
+                  type="email"
+                  value={name}
+                  onChange={handleInputChangeName}
+                />
+                {!isError ? (
+                  <FormHelperText>Enter the name of the app.</FormHelperText>
+                ) : (
+                  <FormErrorMessage>name is required.</FormErrorMessage>
+                )}
               </FormControl>
               <FormControl isInvalid={isError}>
                 <FormLabel>Homepage URL</FormLabel>
-                <Input type="email" value={homepage} onChange={handleInputChangeApp} />
-                {!isError ? <FormHelperText>Homepage is the Landing, gernally designed to be indexed by crawlers.</FormHelperText> : <FormErrorMessage>URL is required.</FormErrorMessage>}
+                <Input
+                  type="email"
+                  value={homepage}
+                  onChange={handleInputChangeApp}
+                />
+                {!isError ? (
+                  <FormHelperText>
+                    Homepage is the Landing, gernally designed to be indexed by
+                    crawlers.
+                  </FormHelperText>
+                ) : (
+                  <FormErrorMessage>URL is required.</FormErrorMessage>
+                )}
               </FormControl>
               <FormControl isInvalid={isError}>
                 <FormLabel>App URL</FormLabel>
-                <Input type="email" value={app} onChange={handleInputChangeApp} />
-                {!isError ? <FormHelperText>Enter the URL of the dapp application itself, gerneally app.serviceName*.com</FormHelperText> : <FormErrorMessage>URL is required.</FormErrorMessage>}
+                <Input
+                  type="email"
+                  value={app}
+                  onChange={handleInputChangeApp}
+                />
+                {!isError ? (
+                  <FormHelperText>
+                    Enter the URL of the dapp application itself, gerneally
+                    app.serviceName*.com
+                  </FormHelperText>
+                ) : (
+                  <FormErrorMessage>URL is required.</FormErrorMessage>
+                )}
               </FormControl>
               <FormControl isInvalid={isError}>
-                <div style={{ border: '1px solid #ccc', padding: '10px', marginTop: '10px' }}>
-                  {image && <img src={image} alt="Image Preview" style={{ width: '100px', height: '100px' }} />}
+                <div
+                  style={{
+                    border: "1px solid #ccc",
+                    padding: "10px",
+                    marginTop: "10px",
+                  }}
+                >
+                  {image && (
+                    <img
+                      src={image}
+                      alt="Image Preview"
+                      style={{ width: "100px", height: "100px" }}
+                    />
+                  )}
                   <FormLabel>Image URL</FormLabel>
-                  <Input type="email" value={image} onChange={handleInputChangeImage} />
+                  <Input
+                    type="email"
+                    value={image}
+                    onChange={handleInputChangeImage}
+                  />
                 </div>
-                {!isError ? <FormHelperText>Enter the URL of the image for the Dapp. This MUST be a valid URL and not an encoding!</FormHelperText> : <FormErrorMessage>Image URL is required.</FormErrorMessage>}
+                {!isError ? (
+                  <FormHelperText>
+                    Enter the URL of the image for the Dapp. This MUST be a
+                    valid URL and not an encoding!
+                  </FormHelperText>
+                ) : (
+                  <FormErrorMessage>Image URL is required.</FormErrorMessage>
+                )}
               </FormControl>
               <FormControl isInvalid={isError}>
                 <FormLabel>Dapp Desription</FormLabel>
-                <Textarea placeholder="This Dapp is great because it does..... " value={description} onChange={handleInputChangeDescription} />
-                {!isError ? <FormHelperText>Describe the Dapp in a short paragraph.</FormHelperText> : <FormErrorMessage>description is required.</FormErrorMessage>}
+                <Textarea
+                  placeholder="This Dapp is great because it does..... "
+                  value={description}
+                  onChange={handleInputChangeDescription}
+                />
+                {!isError ? (
+                  <FormHelperText>
+                    Describe the Dapp in a short paragraph.
+                  </FormHelperText>
+                ) : (
+                  <FormErrorMessage>description is required.</FormErrorMessage>
+                )}
               </FormControl>
               <FormControl isInvalid={isError}>
                 Blockchains Supported By Dapp
@@ -453,7 +609,9 @@ const SubmitDapps = ({ onTabChange }) => {
                   // components={{ Option: IconOption }}
                   onChange={onSelectedBlockchains}
                 ></SelectImported>
-                <FormHelperText>Enter all the blockchains that the dapp supports.</FormHelperText>
+                <FormHelperText>
+                  Enter all the blockchains that the dapp supports.
+                </FormHelperText>
               </FormControl>
               <FormControl isInvalid={isError}>
                 <FormLabel>Protocols Supported</FormLabel>
@@ -484,7 +642,12 @@ const SubmitDapps = ({ onTabChange }) => {
                 <FormLabel>Social Media</FormLabel>
                 <InputGroup>
                   <InputLeftAddon children="Twitter" />
-                  <Input type="text" name="twitter" value={socialMedia.twitter} onChange={handleSocialMediaChange} />
+                  <Input
+                    type="text"
+                    name="twitter"
+                    value={socialMedia.twitter}
+                    onChange={handleSocialMediaChange}
+                  />
                 </InputGroup>
               </FormControl>
 
@@ -492,7 +655,12 @@ const SubmitDapps = ({ onTabChange }) => {
                 <FormLabel>Social Media</FormLabel>
                 <InputGroup>
                   <InputLeftAddon children="Telegram" />
-                  <Input type="text" name="telegram" value={socialMedia.telegram} onChange={handleSocialMediaChange} />
+                  <Input
+                    type="text"
+                    name="telegram"
+                    value={socialMedia.telegram}
+                    onChange={handleSocialMediaChange}
+                  />
                 </InputGroup>
               </FormControl>
 
@@ -500,7 +668,12 @@ const SubmitDapps = ({ onTabChange }) => {
                 <FormLabel>Social Media</FormLabel>
                 <InputGroup>
                   <InputLeftAddon children="GitHub" />
-                  <Input type="text" name="github" value={socialMedia.github} onChange={handleSocialMediaChange} />
+                  <Input
+                    type="text"
+                    name="github"
+                    value={socialMedia.github}
+                    onChange={handleSocialMediaChange}
+                  />
                 </InputGroup>
               </FormControl>
               <Button
@@ -518,7 +691,12 @@ const SubmitDapps = ({ onTabChange }) => {
           <Step label="Submit">
             <Box padding={4}>
               {/* Your form fields for Submit */}
-              <Button mt={4} colorScheme="teal" type="submit" onClick={onSubmit}>
+              <Button
+                mt={4}
+                colorScheme="teal"
+                type="submit"
+                onClick={onSubmit}
+              >
                 Submit
               </Button>
               <Button onClick={onBack}>Back</Button>

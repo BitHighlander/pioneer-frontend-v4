@@ -1,8 +1,29 @@
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, IconButton, Flex, Avatar, CardHeader, CardFooter, Spinner, Text, Box, Heading, Button, Card, CardBody } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
-import { usePioneer } from 'pioneer-react';
-import prettyjson from 'prettyjson';
-import { ArrowUpIcon, ArrowDownIcon, StarIcon } from '@chakra-ui/icons';
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  IconButton,
+  Flex,
+  Avatar,
+  CardHeader,
+  CardFooter,
+  Spinner,
+  Text,
+  Box,
+  Heading,
+  Button,
+  Card,
+  CardBody,
+} from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import { usePioneer } from "pioneer-react";
+import prettyjson from "prettyjson";
+import { ArrowUpIcon, ArrowDownIcon, StarIcon } from "@chakra-ui/icons";
 
 const Header = () => (
   <Box textAlign="center">
@@ -15,13 +36,13 @@ const Chart = () => {
   const { state } = usePioneer();
   const { api } = state;
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [chartType, setChartType] = useState('');
-  const [completeness, setCompleteness] = useState('');
+  const [chartType, setChartType] = useState("");
+  const [completeness, setCompleteness] = useState("");
   const [dataObject, setDataObject] = useState(null);
-  const [actions, setActions] = useState('');
-  const [analysis, setAnalysis] = useState('');
-  const [corectness, setCorectness] = useState('');
-  const [accuracy, setAccuracy] = useState('');
+  const [actions, setActions] = useState("");
+  const [analysis, setAnalysis] = useState("");
+  const [corectness, setCorectness] = useState("");
+  const [accuracy, setAccuracy] = useState("");
   const [missing, setMissing] = useState([]);
 
   const onChart = async function () {
@@ -30,7 +51,7 @@ const Chart = () => {
         // Get work to be done
         let task = await api.RandomCharting();
         task = task.data;
-        console.log('task: ', task.entryType);
+        console.log("task: ", task.entryType);
         setChartType(task.entryType);
         setCompleteness(task.analysis.completeness);
         setCorectness(task.analysis.correctness);
@@ -108,14 +129,16 @@ const Chart = () => {
                   <Box mt={4}>
                     <textarea
                       style={{
-                        width: '100%',
-                        height: '300px',
-                        fontFamily: 'monospace',
-                        fontSize: '14px',
-                        padding: '8px',
+                        width: "100%",
+                        height: "300px",
+                        fontFamily: "monospace",
+                        fontSize: "14px",
+                        padding: "8px",
                       }}
                       value={JSON.stringify(dataObject, null, 2)}
-                      onChange={(e) => setDataObject(JSON.parse(e.target.value))}
+                      onChange={(e) =>
+                        setDataObject(JSON.parse(e.target.value))
+                      }
                     />
                     <Button colorScheme="green" mt={4} onClick={handleSave}>
                       Save
@@ -125,7 +148,12 @@ const Chart = () => {
                 <Card>
                   <CardHeader>
                     <Flex>
-                      <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
+                      <Flex
+                        flex="1"
+                        gap="4"
+                        alignItems="center"
+                        flexWrap="wrap"
+                      >
                         <Avatar name="AI Assistant" src="" />
 
                         <Box>
@@ -133,7 +161,11 @@ const Chart = () => {
                           <Text>Pioneer, Pioneers.dev</Text>
                         </Box>
                       </Flex>
-                      <IconButton variant="ghost" colorScheme="gray" aria-label="See menu" />
+                      <IconButton
+                        variant="ghost"
+                        colorScheme="gray"
+                        aria-label="See menu"
+                      />
                     </Flex>
                   </CardHeader>
                   <CardBody>
@@ -157,8 +189,8 @@ const Chart = () => {
                     justify="space-between"
                     flexWrap="wrap"
                     sx={{
-                      '& > button': {
-                        minW: '136px',
+                      "& > button": {
+                        minW: "136px",
                       },
                     }}
                   ></CardFooter>

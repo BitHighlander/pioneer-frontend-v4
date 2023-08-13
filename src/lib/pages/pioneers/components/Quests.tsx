@@ -1,8 +1,19 @@
-import React, { useEffect } from 'react';
-import { useTable, useSortBy, usePagination } from 'react-table';
-import { ArrowUpIcon, ArrowDownIcon } from '@chakra-ui/icons';
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Avatar, Heading, Button } from '@chakra-ui/react';
-import { usePioneer } from 'pioneer-react';
+import React, { useEffect } from "react";
+import { useTable, useSortBy, usePagination } from "react-table";
+import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Avatar,
+  Heading,
+  Button,
+} from "@chakra-ui/react";
+import { usePioneer } from "pioneer-react";
 
 const Quests = () => {
   const { state } = usePioneer();

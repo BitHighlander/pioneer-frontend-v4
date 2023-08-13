@@ -1,8 +1,21 @@
-import React, { useEffect } from 'react';
-import { useTable, useSortBy, usePagination } from 'react-table';
-import { ArrowUpIcon, ArrowDownIcon } from '@chakra-ui/icons';
-import { Card, CardBody, Box, Table, Thead, Tbody, Tr, Th, Td, Avatar, Heading, Button } from '@chakra-ui/react';
-import { usePioneer } from 'pioneer-react';
+import React, { useEffect } from "react";
+import { useTable, useSortBy, usePagination } from "react-table";
+import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
+import {
+  Card,
+  CardBody,
+  Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Avatar,
+  Heading,
+  Button,
+} from "@chakra-ui/react";
+import { usePioneer } from "pioneer-react";
 
 const Leaderboard = () => {
   const { state } = usePioneer();
@@ -14,8 +27,8 @@ const Leaderboard = () => {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Avatar',
-        accessor: 'avatar',
+        Header: "Avatar",
+        accessor: "avatar",
         // @ts-ignore
         Cell: ({ value }) => <Avatar size="2xl" name={null} src={value} />,
       },
@@ -24,16 +37,16 @@ const Leaderboard = () => {
       //     accessor: 'username',
       // },
       {
-        Header: 'Scores',
-        accessor: 'score',
+        Header: "Scores",
+        accessor: "score",
       },
       {
-        Header: 'Vote Power',
-        accessor: 'power',
+        Header: "Vote Power",
+        accessor: "power",
       },
       {
-        Header: 'Public Address',
-        accessor: 'address',
+        Header: "Public Address",
+        accessor: "address",
       },
     ],
     []
@@ -83,8 +96,14 @@ const Leaderboard = () => {
               <Tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
                   <Th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                    {column.render('Header')}
-                    <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                    {column.render("Header")}
+                    <span>
+                      {column.isSorted
+                        ? column.isSortedDesc
+                          ? " 🔽"
+                          : " 🔼"
+                        : ""}
+                    </span>
                   </Th>
                 ))}
               </Tr>
@@ -96,7 +115,9 @@ const Leaderboard = () => {
               return (
                 <Tr {...row.getRowProps()}>
                   {row.cells.map((cell) => {
-                    return <Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>;
+                    return (
+                      <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
+                    );
                   })}
                 </Tr>
               );
@@ -105,22 +126,25 @@ const Leaderboard = () => {
         </Table>
         <Box>
           <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-            {'<<'}
+            {"<<"}
           </Button>
           <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'<'}
+            {"<"}
           </Button>
           <Button onClick={() => nextPage()} disabled={!canNextPage}>
-            {'>'}
+            {">"}
           </Button>
-          <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-            {'>>'}
+          <Button
+            onClick={() => gotoPage(pageCount - 1)}
+            disabled={!canNextPage}
+          >
+            {">>"}
           </Button>
           <span>
-            Page{' '}
+            Page{" "}
             <strong>
               {pageIndex + 1} of {pageOptions.length}
-            </strong>{' '}
+            </strong>{" "}
           </span>
         </Box>
       </CardBody>

@@ -1,9 +1,20 @@
-import { Box, Heading, Button, Card, CardBody, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import {
+  Box,
+  Heading,
+  Button,
+  Card,
+  CardBody,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 
-import SubmitDapps from './components/SubmitDapps';
-import ChartDapps from './components/ChartDapps';
-import ReviewDapps from './components/ReviewDapps';
+import SubmitDapps from "./components/SubmitDapps";
+import ChartDapps from "./components/ChartDapps";
+import ReviewDapps from "./components/ReviewDapps";
 import { useParams } from "react-router-dom";
 const Header = () => (
   <Box textAlign="center">
@@ -23,15 +34,15 @@ const Dapps = () => {
   const handleTabChange = (index) => {
     setActiveTabIndex(index);
   };
-  
-  let onStart = async function(){
+
+  const onStart = async function () {
     setActiveTabIndex(0);
-  }
+  };
   //onstart get data
   useEffect(() => {
     onStart();
   }, []);
-  
+
   return (
     <Box display="flex" justifyContent="center" height="100vh">
       <Box>
@@ -51,7 +62,7 @@ const Dapps = () => {
               {/*  <ChartDapps></ChartDapps>*/}
               {/*</TabPanel>*/}
               <TabPanel>
-                <SubmitDapps onTabChange={handleTabChange}/>
+                <SubmitDapps onTabChange={handleTabChange} />
               </TabPanel>
             </TabPanels>
           </Box>

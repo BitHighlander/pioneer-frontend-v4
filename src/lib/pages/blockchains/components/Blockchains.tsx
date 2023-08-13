@@ -1,56 +1,104 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Thead, Tbody, Tr, Th, Td, Box, Text, Spinner, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Textarea, Image, Stack, StackDivider, Heading, Card, CardHeader, CardBody, useDisclosure } from '@chakra-ui/react';
-import { usePioneer } from 'pioneer-react';
-import { useTable, useSortBy } from 'react-table';
+import React, { useState, useEffect } from "react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Box,
+  Text,
+  Spinner,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Textarea,
+  Image,
+  Stack,
+  StackDivider,
+  Heading,
+  Card,
+  CardHeader,
+  CardBody,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { usePioneer } from "pioneer-react";
+import { useTable, useSortBy } from "react-table";
 
 const DiscoverdBlockchains = () => {
   const { state } = usePioneer();
   const { api } = state;
-  const [value, setValue] = useState('');
-  const [query, setQuery] = useState('');
+  const [value, setValue] = useState("");
+  const [query, setQuery] = useState("");
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalBlockchains, setTotalBlockchains] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [timeOut, setTimeOut] = useState(null);
-  const [sortField, setSortField] = useState('chainId'); // New state variable for sorting
-  const [sortOrder, setSortOrder] = useState('asc'); // New state variable for sort order
+  const [sortField, setSortField] = useState("chainId"); // New state variable for sorting
+  const [sortOrder, setSortOrder] = useState("asc"); // New state variable for sort order
 
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Image',
-        accessor: 'image',
-        Cell: ({ value }) => <Image src={value} alt="keepkey api" boxSize="40px" borderRadius="full" />,
+        Header: "Image",
+        accessor: "image",
+        Cell: ({ value }) => (
+          <Image
+            src={value}
+            alt="keepkey api"
+            boxSize="40px"
+            borderRadius="full"
+          />
+        ),
       },
       {
-        Header: 'Blockchain',
-        accessor: 'blockchain',
+        Header: "Blockchain",
+        accessor: "blockchain",
       },
       {
-        Header: 'Description',
-        accessor: 'description',
+        Header: "Description",
+        accessor: "description",
         Cell: ({ value }) => <a href={value}>{value}</a>,
       },
       {
-        Header: 'Chain ID',
-        accessor: 'chainId',
+        Header: "Chain ID",
+        accessor: "chainId",
       },
       {
-        accessor: 'caip',
-        Cell: ({ value }) => <div style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', width: 200, maxHeight: '100px', overflowY: 'auto' }}>{value}</div>,
-        Footer: () => 'caip',
+        accessor: "caip",
+        Cell: ({ value }) => (
+          <div
+            style={{
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-word",
+              width: 200,
+              maxHeight: "100px",
+              overflowY: "auto",
+            }}
+          >
+            {value}
+          </div>
+        ),
+        Footer: () => "caip",
         // Adjust the width value as needed
       },
       {
-        Header: 'Edit',
-        accessor: 'exit',
-        Cell: ({ value }) => <Button onClick={() => editEntry(value)}>Edit</Button>,
+        Header: "Edit",
+        accessor: "exit",
+        Cell: ({ value }) => (
+          <Button onClick={() => editEntry(value)}>Edit</Button>
+        ),
       },
       {
-        Header: 'Delete',
-        accessor: 'delete',
+        Header: "Delete",
+        accessor: "delete",
         Cell: ({ value }) => (
           <Button colorScheme="red" onClick={() => deleteEntry(value)}>
             Delete
@@ -66,7 +114,7 @@ const DiscoverdBlockchains = () => {
       columns,
       data,
       initialState: {
-        sortBy: [{ id: 'blockchain', desc: false }], // Default sorting by 'blockchain' in ascending order
+        sortBy: [{ id: "blockchain", desc: false }], // Default sorting by 'blockchain' in ascending order
       },
     },
     useSortBy
@@ -82,8 +130,9 @@ const DiscoverdBlockchains = () => {
   } = tableInstance;
 
   const handleClickedSortBy = (columnId) => {
-    const newSortField = columnId || 'blockchain';
-    const newSortOrder = sortField === newSortField && sortOrder === 'asc' ? 'desc' : 'asc';
+    const newSortField = columnId || "blockchain";
+    const newSortOrder =
+      sortField === newSortField && sortOrder === "asc" ? "desc" : "asc";
 
     setSortField(newSortField);
     setSortOrder(newSortOrder);
@@ -99,11 +148,11 @@ const DiscoverdBlockchains = () => {
           limit: itemsPerPage,
           skip: (currentPage - 1) * itemsPerPage,
           sortField: sortField,
-          sortOrder: sortOrder === 'asc' ? 1 : -1
+          sortOrder: sortOrder === "asc" ? 1 : -1,
         };
-        console.log('payload: ', payload);
+        console.log("payload: ", payload);
         const blockchains = await api.SearchBlockchainsPageniate(payload);
-        console.log('blockchains: ', blockchains.data);
+        console.log("blockchains: ", blockchains.data);
         setData(blockchains.data.blockchains);
         setTotalBlockchains(blockchains.data.total);
       }
@@ -164,13 +213,13 @@ const DiscoverdBlockchains = () => {
   };
 
   const onClear = () => {
-    setQuery('');
+    setQuery("");
   };
 
   const search = async (query) => {
-    console.log('query: ', query);
+    console.log("query: ", query);
     const KeepKeyPage1 = await api.SearchByBlockchainName(query);
-    console.log('KeepKeyPage1: ', KeepKeyPage1.data);
+    console.log("KeepKeyPage1: ", KeepKeyPage1.data);
     setData(KeepKeyPage1.data);
   };
 
@@ -183,9 +232,20 @@ const DiscoverdBlockchains = () => {
     const totalPages = Math.ceil(totalBlockchains / itemsPerPage);
     const pageNumbers = [];
     for (let i = 1; i <= totalPages; i++) {
-      if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - 2 && i <= currentPage + 2)
+      ) {
         const pageNumber = (
-          <Button key={i} onClick={() => handlePaginationChange(i)} disabled={i === currentPage} colorScheme={i === currentPage ? 'blue' : undefined} variant={i === currentPage ? 'solid' : 'outline'} mx={1}>
+          <Button
+            key={i}
+            onClick={() => handlePaginationChange(i)}
+            disabled={i === currentPage}
+            colorScheme={i === currentPage ? "blue" : undefined}
+            variant={i === currentPage ? "solid" : "outline"}
+            mx={1}
+          >
             {i}
           </Button>
         );
@@ -194,7 +254,7 @@ const DiscoverdBlockchains = () => {
       } else if (i === currentPage - 3 || i === currentPage + 3) {
         // @ts-ignore
         pageNumbers.push(
-            // @ts-ignore
+          // @ts-ignore
           <Text mx={1} key={i}>
             ...
           </Text>
@@ -229,22 +289,41 @@ const DiscoverdBlockchains = () => {
       <CardBody>
         <Box>
           <Text>Search:</Text>
-          <input onFocus={onClear} value={query} onChange={handleKeyPress} type="search" style={{ border: '2px solid black', padding: '15px' }} />
+          <input
+            onFocus={onClear}
+            value={query}
+            onChange={handleKeyPress}
+            type="search"
+            style={{ border: "2px solid black", padding: "15px" }}
+          />
         </Box>
         <Box w="1200px" mt={9} overflowX="auto" justifyContent="center">
           <Table {...getTableProps()}>
             <Thead>
               {headerGroups.map((headerGroup) => (
-                <Tr key={headerGroup.id} {...headerGroup.getHeaderGroupProps()} style={{ borderBottom: '2px solid black' }}>
+                <Tr
+                  key={headerGroup.id}
+                  {...headerGroup.getHeaderGroupProps()}
+                  style={{ borderBottom: "2px solid black" }}
+                >
                   {headerGroup.headers.map((column) => (
                     <Th
                       key={column.id}
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                       onClick={() => handleClickedSortBy(column.id)} // Use column.id instead of column
-                      style={{ padding: '10px', fontWeight: 'bold', fontSize: '20px', cursor: 'pointer' }}
+                      style={{
+                        padding: "10px",
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
                     >
-                      {column.render('Header')}
-                      {column.isSorted ? (column.isSortedDesc ? ' ↓' : ' ↑') : ''}
+                      {column.render("Header")}
+                      {column.isSorted
+                        ? column.isSortedDesc
+                          ? " ↓"
+                          : " ↑"
+                        : ""}
                     </Th>
                   ))}
                 </Tr>
@@ -254,10 +333,18 @@ const DiscoverdBlockchains = () => {
               {rows.map((row) => {
                 prepareRow(row);
                 return (
-                  <Tr key={row.id} {...row.getRowProps()} style={{ borderBottom: '1px solid black' }}>
+                  <Tr
+                    key={row.id}
+                    {...row.getRowProps()}
+                    style={{ borderBottom: "1px solid black" }}
+                  >
                     {row.cells.map((cell) => (
-                      <Td key={cell.id} {...cell.getCellProps()} style={{ padding: '10px' }}>
-                        {cell.render('Cell')}
+                      <Td
+                        key={cell.id}
+                        {...cell.getCellProps()}
+                        style={{ padding: "10px" }}
+                      >
+                        {cell.render("Cell")}
                       </Td>
                     ))}
                   </Tr>

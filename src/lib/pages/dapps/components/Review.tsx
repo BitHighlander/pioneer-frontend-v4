@@ -1,6 +1,6 @@
-import React from 'react';
-import { Avatar, Box, Flex, Heading } from '@chakra-ui/react';
-import StarRating from './StarRating';
+import React from "react";
+import { Avatar, Box, Flex, Heading } from "@chakra-ui/react";
+import StarRating from "./StarRating";
 
 interface StarRatingProps {
   rating: number;
@@ -15,7 +15,13 @@ interface ReviewProps extends StarRatingProps {
   text: string;
 }
 
-export default function Review({ name, rating, avatar, text, setRating }: ReviewProps) {
+export default function Review({
+  name,
+  rating,
+  avatar,
+  text,
+  setRating,
+}: ReviewProps) {
   return (
     <Box mb={4}>
       <Flex alignItems="center" justifyContent="space-between">

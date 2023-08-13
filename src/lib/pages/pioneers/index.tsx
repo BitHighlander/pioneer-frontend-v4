@@ -1,9 +1,20 @@
-import { Box, Heading, Button, Card, CardBody, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Button,
+  Card,
+  CardBody,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
 
-import React from 'react';
+import React from "react";
 
-import Leaderboard from './components/Leaderboard';
-import Quests from './components/Quests';
+import Leaderboard from "./components/Leaderboard";
+import Quests from "./components/Quests";
 
 const Header = () => (
   <Box textAlign="center">

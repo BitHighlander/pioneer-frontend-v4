@@ -1,17 +1,65 @@
-import { Checkbox, CardBody, Spinner, Grid, Image, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, InputGroup, InputLeftAddon, ModalBody, Textarea, ModalFooter, useDisclosure, FormControl, FormLabel, Input, FormHelperText, FormErrorMessage, Card, Avatar, Heading, Text, Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, Box, Tabs, TabList, TabPanels, Tab, TabPanel, Flex, Select } from '@chakra-ui/react';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { ArrowUpIcon, ArrowDownIcon, StarIcon } from '@chakra-ui/icons';
-import { useToast } from '@chakra-ui/react';
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { protocols, features } from './Constants';
-import { useMemo, useEffect, useState } from 'react';
-import { Select as SelectImported } from 'chakra-react-select';
+import {
+  Checkbox,
+  CardBody,
+  Spinner,
+  Grid,
+  Image,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  InputGroup,
+  InputLeftAddon,
+  ModalBody,
+  Textarea,
+  ModalFooter,
+  useDisclosure,
+  FormControl,
+  FormLabel,
+  Input,
+  FormHelperText,
+  FormErrorMessage,
+  Card,
+  Avatar,
+  Heading,
+  Text,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  Box,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Flex,
+  Select,
+} from "@chakra-ui/react";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { ArrowUpIcon, ArrowDownIcon, StarIcon } from "@chakra-ui/icons";
+import { useToast } from "@chakra-ui/react";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { protocols, features } from "./Constants";
+import { useMemo, useEffect, useState } from "react";
+import { Select as SelectImported } from "chakra-react-select";
 const columnHelper = createColumnHelper<any>();
-import { usePioneer } from 'pioneer-react';
-import ReactPaginate from 'react-paginate';
-import Review from './Review';
-import StarRating from './StarRating';
+import { usePioneer } from "pioneer-react";
+import ReactPaginate from "react-paginate";
+import Review from "./Review";
+import StarRating from "./StarRating";
 import { useParams } from "react-router-dom";
 
 const ReviewDapps = () => {
@@ -26,10 +74,11 @@ const ReviewDapps = () => {
   // const alert = useAlert()
   const [selectedBlockchain, setSelectedBlockchain] = useState(null);
   const [selectedWallet, setSelectedWallet] = useState(null);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [timeOut, setTimeOut] = useState(null);
   const [showAllSelected, setShowAllSelected] = useState(false);
-  const [filterByBlockchainSelected, setFilterByBlockchainSelected] = useState("");
+  const [filterByBlockchainSelected, setFilterByBlockchainSelected] =
+    useState("");
   const [entry, setEntry] = useState<any>({});
   const [tabIndex, setTabIndex] = useState(0);
   const [votedUpNames, setVotedUpNames] = React.useState(() => []);
@@ -37,19 +86,21 @@ const ReviewDapps = () => {
   const [allUpVotesContext, setAllUpVotesContext] = useState<any[]>([]);
   const [allDownVotesContext, setAllDownVotesContext] = useState<any[]>([]);
   const [data, setData] = React.useState(() => []);
-  const [name, setName] = useState('');
-  const [app, setApp] = useState('');
-  const [image, setImage] = useState('');
-  const [url, setUrl] = useState('');
+  const [name, setName] = useState("");
+  const [app, setApp] = useState("");
+  const [image, setImage] = useState("");
+  const [url, setUrl] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [isPioneer, setIsPioneer] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [description, setDescription] = useState('');
-  const [homepage, setHomepage] = useState('');
-  const [urlError, setUrlError] = useState('');
-  const [homepageError, setHomepageError] = useState('');
+  const [description, setDescription] = useState("");
+  const [homepage, setHomepage] = useState("");
+  const [urlError, setUrlError] = useState("");
+  const [homepageError, setHomepageError] = useState("");
   const [blockchainsSupported, setBlockchainsSupported] = useState<any[]>([]);
-  const [protocolsSupported, setProtocolsSupported] = useState<any[]>(['wallet-connect']);
+  const [protocolsSupported, setProtocolsSupported] = useState<any[]>([
+    "wallet-connect",
+  ]);
   const [featuresSupported, setFeaturesSupported] = useState<any[]>([]);
   const [activeStep, setActiveStep] = useState(0);
   const [minVersion, setMinVersion] = React.useState([]);
@@ -58,12 +109,12 @@ const ReviewDapps = () => {
   const [reviews, setReviews] = useState([]);
   const [reviewList, setReviewList] = React.useState<any[]>([]);
   const [isSubmitingReview, setIsSubmitingReview] = React.useState(false);
-  const [starRating, setStarRating] = useState('');
-  const [reviewText, setReviewText] = useState('');
+  const [starRating, setStarRating] = useState("");
+  const [reviewText, setReviewText] = useState("");
   const [socialMedia, setSocialMedia] = useState({
-    twitter: '',
-    telegram: '',
-    github: 'https://github.com/shapeshift/',
+    twitter: "",
+    telegram: "",
+    github: "https://github.com/shapeshift/",
   });
   const reviewsPerPage = 5;
   const handleInputChangeName = (e) => {
@@ -88,13 +139,13 @@ const ReviewDapps = () => {
   // simple url validation
   const validateURL = (text) => {
     const pattern = new RegExp(
-      '^(https?:\\/\\/)?' + // protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-z\\d_]*)?$',
-      'i'
+      "^(https?:\\/\\/)?" + // protocol
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name
+        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+        "(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" + // port and path
+        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+        "(\\#[-a-z\\d_]*)?$",
+      "i"
     ); // fragment locator
     return !!pattern.test(text);
   };
@@ -115,7 +166,9 @@ const ReviewDapps = () => {
   };
 
   const handleSelectedProtocols = (selectedOptions) => {
-    const selectedProtocolValues = selectedOptions.map((option) => option.value);
+    const selectedProtocolValues = selectedOptions.map(
+      (option) => option.value
+    );
     setProtocolsSupported(selectedProtocolValues);
   };
 
@@ -127,43 +180,58 @@ const ReviewDapps = () => {
   const toast = useToast();
 
   const isUpActive = function (name: string) {
-    console.log('isUpActive: ', name);
+    console.log("isUpActive: ", name);
     // @ts-ignore
     if (votedUpNames.indexOf(name) >= 0) {
-      console.log('isUpActive: TRUE', name);
-      return 'green';
+      console.log("isUpActive: TRUE", name);
+      return "green";
     } else {
-      console.log('isUpActive: FALSE', name);
-      return 'gray';
+      console.log("isUpActive: FALSE", name);
+      return "gray";
     }
   };
 
   const columns = React.useMemo(() => {
     const columnDefinitions = [
-      columnHelper.accessor('image', {
+      columnHelper.accessor("image", {
         cell: (info) =>
           info.getValue() ? (
             <div onClick={() => openEntry(info.row.original.name)}>
-              <Image src={info.getValue()} alt="keepkey api" objectFit="cover" height="60px" width="60px" objectPosition="center" />
+              <Image
+                src={info.getValue()}
+                alt="keepkey api"
+                objectFit="cover"
+                height="60px"
+                width="60px"
+                objectPosition="center"
+              />
             </div>
           ) : null,
         footer: (info) => info.column.id,
       }),
-      columnHelper.accessor('name', {
-        cell: (info) => <div onClick={() => openEntry(info.getValue())}>{info.getValue()}</div>,
+      columnHelper.accessor("name", {
+        cell: (info) => (
+          <div onClick={() => openEntry(info.getValue())}>
+            {info.getValue()}
+          </div>
+        ),
         footer: (info) => info.column.id,
       }),
-      columnHelper.accessor('app', {
-        cell: (info) => <div onClick={() => openEntry(info.getValue())}>{info.getValue()}</div>,
+      columnHelper.accessor("app", {
+        cell: (info) => (
+          <div onClick={() => openEntry(info.getValue())}>
+            {info.getValue()}
+          </div>
+        ),
         footer: (info) => info.column.id,
       }),
-      columnHelper.accessor('score', {
+      columnHelper.accessor("score", {
         cell: (info) => Math.round(info.getValue()),
         // @ts-ignore
         footer: (info) => Math.round(info.column.id),
       }),
-      columnHelper.accessor('name', {
-        id: 'upvote',
+      columnHelper.accessor("name", {
+        id: "upvote",
         cell: (info) => (
           <Button onClick={() => upVote(info.getValue())}>
             <ArrowUpIcon w={8} h={8} color="green.500" />
@@ -172,8 +240,8 @@ const ReviewDapps = () => {
         header: () => <span>upvote</span>,
         footer: (info) => info.column.id,
       }),
-      columnHelper.accessor('name', {
-        id: 'downvote',
+      columnHelper.accessor("name", {
+        id: "downvote",
         cell: (info) => (
           <Button onClick={() => downVote(info.getValue())}>
             <ArrowDownIcon w={8} h={8} color="red.500" />
@@ -182,21 +250,29 @@ const ReviewDapps = () => {
         header: () => <span>downvote</span>,
         footer: (info) => info.column.id,
       }),
-      columnHelper.accessor('name', {
-        id: 'edit',
-        cell: (info) => <Button onClick={() => editEntry(info.row.original.name)}>Review</Button>,
+      columnHelper.accessor("name", {
+        id: "edit",
+        cell: (info) => (
+          <Button onClick={() => editEntry(info.row.original.name)}>
+            Review
+          </Button>
+        ),
         header: () => <span>review</span>,
         footer: (info) => info.column.id,
-      })
+      }),
     ];
 
     if (isPioneer) {
       columnDefinitions.push({
-        id: 'reject',
+        id: "reject",
         // @ts-ignore
-        accessor: 'name',
+        accessor: "name",
         // @ts-ignore
-        cell: ({ value }) => useMemo(() => <Button onClick={() => onRevokeEntry(value)}>reject</Button>, [value]),
+        cell: ({ value }) =>
+          useMemo(
+            () => <Button onClick={() => onRevokeEntry(value)}>reject</Button>,
+            [value]
+          ),
         header: () => <span>reject</span>,
         footer: (info) => info.column.id,
       });
@@ -207,11 +283,16 @@ const ReviewDapps = () => {
 
   const onRefresh = async function () {
     try {
-      console.log("showAllSelected: ", showAllSelected)
-      let query = {limit:100,skip:0,sortBy:"score"};
-      const apps = await api.SearchDapps({limit:1000,skip:0,sortBy:"score",isWhitelisted:!showAllSelected});
-      console.log('apps: ', apps.data.dapps.length);
-      console.log('apps: ', apps.data.dapps[0]);
+      console.log("showAllSelected: ", showAllSelected);
+      const query = { limit: 100, skip: 0, sortBy: "score" };
+      const apps = await api.SearchDapps({
+        limit: 1000,
+        skip: 0,
+        sortBy: "score",
+        isWhitelisted: !showAllSelected,
+      });
+      console.log("apps: ", apps.data.dapps.length);
+      console.log("apps: ", apps.data.dapps[0]);
       const sortArrayByScore = (arr: any[]) => {
         return arr.sort((a, b) => {
           if (a.score === undefined) a.score = 0;
@@ -220,7 +301,7 @@ const ReviewDapps = () => {
         });
       };
       apps.data.dapps = sortArrayByScore(apps.data.dapps);
-      console.log('apps: ', apps.data);
+      console.log("apps: ", apps.data);
 
       //setData
       setData(apps.data.dapps);
@@ -232,18 +313,23 @@ const ReviewDapps = () => {
 
   const onStart = async function () {
     try {
-      console.log("search: ",search)
-      console.log("search: ",search)
-      if(showUncharted){
-        setShowAllSelected(true)
+      console.log("search: ", search);
+      console.log("search: ", search);
+      if (showUncharted) {
+        setShowAllSelected(true);
       }
-      if(search){
+      if (search) {
         performSearch(search);
       } else {
         //get all unapproved dapps
-        const apps = await api.SearchDapps({limit:1000,skip:0,sortBy:"score",isWhitelisted:!showAllSelected});
-        console.log('apps: ', apps.data.dapps.length);
-        console.log('apps: ', apps.data.dapps[0]);
+        const apps = await api.SearchDapps({
+          limit: 1000,
+          skip: 0,
+          sortBy: "score",
+          isWhitelisted: !showAllSelected,
+        });
+        console.log("apps: ", apps.data.dapps.length);
+        console.log("apps: ", apps.data.dapps[0]);
         const sortArrayByScore = (arr: any[]) => {
           return arr.sort((a, b) => {
             if (a.score === undefined) a.score = 0;
@@ -252,15 +338,18 @@ const ReviewDapps = () => {
           });
         };
         apps.data.dapps = sortArrayByScore(apps.data.dapps);
-        console.log('apps: ', apps.data);
+        console.log("apps: ", apps.data);
 
         //setData
         setData(apps.data.dapps);
       }
 
-      let blockchains = await api.SearchBlockchainsPaginate({ limit: 1000, skip: 0 });
+      let blockchains = await api.SearchBlockchainsPaginate({
+        limit: 1000,
+        skip: 0,
+      });
       blockchains = blockchains.data;
-      console.log('blockchains: ', blockchains.length);
+      console.log("blockchains: ", blockchains.length);
       const blockchainsFormated: any = [];
       for (let i = 0; i < blockchains.length; i++) {
         const blockchain = blockchains[i];
@@ -268,7 +357,7 @@ const ReviewDapps = () => {
         blockchain.label = blockchain.name;
         blockchainsFormated.push(blockchain);
       }
-      console.log('blockchainsFormated: ', blockchainsFormated.length);
+      console.log("blockchainsFormated: ", blockchainsFormated.length);
       setBlockchains(blockchainsFormated);
 
       //get reviews
@@ -299,7 +388,7 @@ const ReviewDapps = () => {
       //update entry
       const entry = {
         name: name,
-        vote: 'up',
+        vote: "up",
       };
       //toString
       const payload = JSON.stringify(entry);
@@ -309,26 +398,30 @@ const ReviewDapps = () => {
       });
       const addressInfo = {
         addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-        coin: 'Ethereum',
-        scriptType: 'ethereum',
+        coin: "Ethereum",
+        scriptType: "ethereum",
         showDisplay: false,
       };
       const address = await wallet.ethGetAddress(addressInfo);
       const update: any = {};
 
-      if (!address) throw Error('address required!');
+      if (!address) throw Error("address required!");
       update.signer = address;
       update.payload = payload;
       update.signature = signature.signature;
-      if (!address) throw Error('address required!');
+      if (!address) throw Error("address required!");
       //submit as admin
-      console.log('update: ', update);
+      console.log("update: ", update);
       const resultWhitelist = await api.VoteOnApp(update);
-      console.log('resultWhitelist: ', resultWhitelist);
+      console.log("resultWhitelist: ", resultWhitelist);
       toast({
-        title: 'User Voted!.',
-        description: 'You UP voted for ' + name + ' result: ' + resultWhitelist.data?.message,
-        status: 'success',
+        title: "User Voted!.",
+        description:
+          "You UP voted for " +
+          name +
+          " result: " +
+          resultWhitelist.data?.message,
+        status: "success",
         duration: 9000,
         isClosable: true,
       });
@@ -344,7 +437,7 @@ const ReviewDapps = () => {
       //update entry
       const entry = {
         name: name,
-        vote: 'down',
+        vote: "down",
       };
       //toString
       const payload = JSON.stringify(entry);
@@ -352,29 +445,33 @@ const ReviewDapps = () => {
         addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
         message: payload,
       });
-      console.log('signature: ', signature);
+      console.log("signature: ", signature);
 
       const update: any = {};
       const addressInfo = {
         addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-        coin: 'Ethereum',
-        scriptType: 'ethereum',
+        coin: "Ethereum",
+        scriptType: "ethereum",
         showDisplay: false,
       };
       const address = await wallet.ethGetAddress(addressInfo);
       update.signer = address;
       update.payload = payload;
       update.signature = signature.signature;
-      if (!address) throw Error('address required!');
+      if (!address) throw Error("address required!");
       //submit as admin
-      console.log('update: ', update);
+      console.log("update: ", update);
       const resultWhitelist = await api.VoteOnApp(update);
-      console.log('resultWhitelist: ', resultWhitelist);
+      console.log("resultWhitelist: ", resultWhitelist);
 
       toast({
-        title: 'User Voted!.',
-        description: 'You DOWN voted for ' + name + ' result: ' + resultWhitelist.data?.message,
-        status: 'success',
+        title: "User Voted!.",
+        description:
+          "You DOWN voted for " +
+          name +
+          " result: " +
+          resultWhitelist.data?.message,
+        status: "success",
         duration: 9000,
         isClosable: true,
       });
@@ -388,7 +485,7 @@ const ReviewDapps = () => {
   const submitVotes = async function () {
     try {
       //open modal
-      console.log('submitVotes: ');
+      console.log("submitVotes: ");
     } catch (e) {
       console.error(e);
     }
@@ -404,10 +501,10 @@ const ReviewDapps = () => {
       // @ts-ignore
       const selectedEntry = data.find((entry) => entry.name === name);
       if (!selectedEntry) {
-        console.error('Entry not found');
+        console.error("Entry not found");
         return;
       }
-      console.log("selectedEntry: ", selectedEntry)
+      console.log("selectedEntry: ", selectedEntry);
       // Set the local state variables with the selected entry's values
       // @ts-ignore
       setName(selectedEntry.name);
@@ -428,13 +525,14 @@ const ReviewDapps = () => {
       // @ts-ignore
       setSocialMedia({
         // @ts-ignore
-        twitter: selectedEntry.socialMedia?.twitter || '',
+        twitter: selectedEntry.socialMedia?.twitter || "",
         // @ts-ignore
-        telegram: selectedEntry.socialMedia?.telegram || '',
+        telegram: selectedEntry.socialMedia?.telegram || "",
         // @ts-ignore
-        github: selectedEntry.socialMedia?.github || 'https://github.com/shapeshift/',
+        github:
+        // @ts-ignore
+          selectedEntry.socialMedia?.github || "https://github.com/shapeshift/",
       });
-
     } catch (e) {
       console.error(e);
     }
@@ -442,9 +540,9 @@ const ReviewDapps = () => {
 
   const getVotes = async (name: string) => {
     try {
-      console.log('getVotes: ', name);
+      console.log("getVotes: ", name);
       const allVotes = await api.ListAppVotesByName({ name });
-      console.log('allVotes: ', allVotes);
+      console.log("allVotes: ", allVotes);
       setAllUpVotesContext(allVotes.data.allFactsUp);
       setAllDownVotesContext(allVotes.data.allFactsDown);
     } catch (e) {
@@ -454,7 +552,7 @@ const ReviewDapps = () => {
 
   const editEntry = async function (name: string) {
     try {
-      console.log('Edit entry: ', name);
+      console.log("Edit entry: ", name);
       getVotes(name);
       setTabIndex(1);
       onOpen();
@@ -463,10 +561,10 @@ const ReviewDapps = () => {
       // @ts-ignore
       const selectedEntry = data.find((entry) => entry.name === name);
       if (!selectedEntry) {
-        console.error('Entry not found');
+        console.error("Entry not found");
         return;
       }
-      console.log("selectedEntry: ", selectedEntry)
+      console.log("selectedEntry: ", selectedEntry);
       // Set the local state variables with the selected entry's values
       // @ts-ignore
       setName(selectedEntry.name);
@@ -487,11 +585,13 @@ const ReviewDapps = () => {
       // @ts-ignore
       setSocialMedia({
         // @ts-ignore
-        twitter: selectedEntry.socialMedia?.twitter || '',
+        twitter: selectedEntry.socialMedia?.twitter || "",
         // @ts-ignore
-        telegram: selectedEntry.socialMedia?.telegram || '',
+        telegram: selectedEntry.socialMedia?.telegram || "",
         // @ts-ignore
-        github: selectedEntry.socialMedia?.github || 'https://github.com/shapeshift/',
+        github:
+        // @ts-ignore
+          selectedEntry.socialMedia?.github || "https://github.com/shapeshift/",
       });
     } catch (e) {
       console.error(e);
@@ -500,7 +600,7 @@ const ReviewDapps = () => {
 
   const onSubmitEdit = async () => {
     try {
-      console.log('onSubmitEdit: ');
+      console.log("onSubmitEdit: ");
       const updatePayload: any = {};
 
       // Compare the form state with the selected entry's values
@@ -519,23 +619,39 @@ const ReviewDapps = () => {
       if (homepage !== entry.homepage) {
         updatePayload.homepage = homepage;
       }
-      if (JSON.stringify(blockchainsSupported) !== JSON.stringify(entry.blockchains)) {
+      if (
+        JSON.stringify(blockchainsSupported) !==
+        JSON.stringify(entry.blockchains)
+      ) {
         updatePayload.blockchains = blockchainsSupported;
       }
-      if (JSON.stringify(protocolsSupported) !== JSON.stringify(entry.protocols)) {
+      if (
+        JSON.stringify(protocolsSupported) !== JSON.stringify(entry.protocols)
+      ) {
         updatePayload.protocols = protocolsSupported;
       }
-      if (JSON.stringify(featuresSupported) !== JSON.stringify(entry.features)) {
+      if (
+        JSON.stringify(featuresSupported) !== JSON.stringify(entry.features)
+      ) {
         updatePayload.features = featuresSupported;
       }
-      if (socialMedia.twitter !== (entry.socialMedia?.twitter || '')) {
+      if (socialMedia.twitter !== (entry.socialMedia?.twitter || "")) {
         updatePayload.socialMedia = { twitter: socialMedia.twitter };
       }
-      if (socialMedia.telegram !== (entry.socialMedia?.telegram || '')) {
-        updatePayload.socialMedia = { ...updatePayload.socialMedia, telegram: socialMedia.telegram };
+      if (socialMedia.telegram !== (entry.socialMedia?.telegram || "")) {
+        updatePayload.socialMedia = {
+          ...updatePayload.socialMedia,
+          telegram: socialMedia.telegram,
+        };
       }
-      if (socialMedia.github !== (entry.socialMedia?.github || 'https://github.com/shapeshift/')) {
-        updatePayload.socialMedia = { ...updatePayload.socialMedia, github: socialMedia.github };
+      if (
+        socialMedia.github !==
+        (entry.socialMedia?.github || "https://github.com/shapeshift/")
+      ) {
+        updatePayload.socialMedia = {
+          ...updatePayload.socialMedia,
+          github: socialMedia.github,
+        };
       }
 
       const fieldChanged = Object.keys(updatePayload)[0]; // Get the first changed field
@@ -547,11 +663,11 @@ const ReviewDapps = () => {
           message: `Changed ${fieldChanged} field`,
         });
 
-        console.log('Signature:', signature);
+        console.log("Signature:", signature);
         const addressInfo = {
           addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-          coin: 'Ethereum',
-          scriptType: 'ethereum',
+          coin: "Ethereum",
+          scriptType: "ethereum",
           showDisplay: false,
         };
         const address = await wallet.ethGetAddress(addressInfo);
@@ -565,7 +681,7 @@ const ReviewDapps = () => {
         };
 
         const result = await api.UpdateApp(updateData);
-        console.log('API Response:', result);
+        console.log("API Response:", result);
       }
     } catch (e) {
       console.error(e);
@@ -580,7 +696,7 @@ const ReviewDapps = () => {
 
   const onSubmitReview = async function (inputs: any) {
     try {
-      console.log('input: onSelectedBlockchains: ', inputs);
+      console.log("input: onSelectedBlockchains: ", inputs);
       setIsSubmitingReview(true);
     } catch (e) {
       console.error(e);
@@ -590,17 +706,17 @@ const ReviewDapps = () => {
   //handleSubmitReview
   const handleSubmitReview = async function (app: any) {
     try {
-      console.log('input: handleSubmitReview: ', app);
+      console.log("input: handleSubmitReview: ", app);
       //submit review
       const review = {
         app,
         rating: starRating,
         text: reviewText,
-        testedBlockchains: ['ethereum'],
+        testedBlockchains: ["ethereum"],
       };
 
       const payload = `{"type": "revoke", "app": "${app}"}`;
-      console.log('payload: ', entry);
+      console.log("payload: ", entry);
 
       //
       const signature = await wallet.ethSignMessage({
@@ -610,18 +726,18 @@ const ReviewDapps = () => {
       const body: any = {};
       const addressInfo = {
         addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-        coin: 'Ethereum',
-        scriptType: 'ethereum',
+        coin: "Ethereum",
+        scriptType: "ethereum",
         showDisplay: false,
       };
       body.signer = await wallet.ethGetAddress(addressInfo);
       body.payload = payload;
       body.signature = signature.signature;
       body.review = review;
-      if (!body.signer) throw Error('address required!');
-      console.log('handleSubmitReview submit review: ', body);
+      if (!body.signer) throw Error("address required!");
+      console.log("handleSubmitReview submit review: ", body);
       const result = await api.SubmitReview(body);
-      console.log('handleSubmitReview result submit review: ', result.data);
+      console.log("handleSubmitReview result submit review: ", result.data);
     } catch (e) {
       console.error(e);
     }
@@ -629,7 +745,7 @@ const ReviewDapps = () => {
 
   const onSelectedBlockchains = async function (inputs: any) {
     try {
-      console.log('input: onSelectedBlockchains: ', inputs);
+      console.log("input: onSelectedBlockchains: ", inputs);
       const blockchains: any = [];
       for (let i = 0; i < inputs.length; i++) {
         const input = inputs[i];
@@ -643,7 +759,7 @@ const ReviewDapps = () => {
 
   const onSelectedProtocols = async function (input: any) {
     try {
-      console.log('input: onSelectedProtocols: ', input);
+      console.log("input: onSelectedProtocols: ", input);
       setProtocolsSupported(input);
     } catch (e) {
       console.error(e);
@@ -652,7 +768,7 @@ const ReviewDapps = () => {
 
   const onSelectedFeatures = async function (input: any) {
     try {
-      console.log('input: onSelectedFeatures: ', input);
+      console.log("input: onSelectedFeatures: ", input);
       setFeaturesSupported(input);
     } catch (e) {
       console.error(e);
@@ -661,11 +777,11 @@ const ReviewDapps = () => {
 
   const onRevokeEntry = async function (app: any) {
     try {
-      console.log('revoke entry: ', app);
+      console.log("revoke entry: ", app);
       //submit as pioneer
 
       const payload = `{"type": "revoke", "app": "${app}"}`;
-      console.log('payload: ', entry);
+      console.log("payload: ", entry);
 
       //
       const signature = await wallet.ethSignMessage({
@@ -675,17 +791,17 @@ const ReviewDapps = () => {
       const revoke: any = {};
       const addressInfo = {
         addressNList: [2147483692, 2147483708, 2147483648, 0, 0],
-        coin: 'Ethereum',
-        scriptType: 'ethereum',
+        coin: "Ethereum",
+        scriptType: "ethereum",
         showDisplay: false,
       };
       revoke.signer = await wallet.ethGetAddress(addressInfo);
       revoke.payload = payload;
       revoke.signature = signature.signature;
-      if (!revoke.signer) throw Error('address required!');
+      if (!revoke.signer) throw Error("address required!");
 
       const resultWhitelist = await api.RevokeApp(revoke);
-      console.log('resultWhitelist: ', resultWhitelist);
+      console.log("resultWhitelist: ", resultWhitelist);
     } catch (e) {
       console.error(e);
     }
@@ -744,14 +860,14 @@ const ReviewDapps = () => {
   );
 
   const performSearch = async (query) => {
-    console.log('query: ', query);
-    let searchQuery = {
-      collection: 'apps',
+    console.log("query: ", query);
+    const searchQuery = {
+      collection: "apps",
       string: query,
-    }
-    const apps = await api.SearchDappsByName({name:query});
-    console.log('apps: ', apps.data.length);
-    console.log('apps: ', apps.data[0]);
+    };
+    const apps = await api.SearchDappsByName({ name: query });
+    console.log("apps: ", apps.data.length);
+    console.log("apps: ", apps.data[0]);
     const sortArrayByScore = (arr: any[]) => {
       return arr.sort((a, b) => {
         if (a.score === undefined) a.score = 0;
@@ -760,7 +876,7 @@ const ReviewDapps = () => {
       });
     };
     apps.data = sortArrayByScore(apps.data);
-    console.log('apps: ', apps.data);
+    console.log("apps: ", apps.data);
 
     //setData
     setData(apps.data);
@@ -773,15 +889,15 @@ const ReviewDapps = () => {
     const inputValue = event.target.value;
     setQuery(inputValue);
     setTimeOut(
-        // @ts-ignore
-        setTimeout(() => {
-          performSearch(inputValue);
-        }, 1000)
+      // @ts-ignore
+      setTimeout(() => {
+        performSearch(inputValue);
+      }, 1000)
     );
   };
 
   const onClear = () => {
-    setQuery('');
+    setQuery("");
   };
 
   const handlePageChange = ({ selected }) => {
@@ -791,7 +907,7 @@ const ReviewDapps = () => {
   // Function to handle the Show Uncharted checkbox change
   const handleShowUnchartedChange = (event) => {
     //update data
-    if(event.target.checked){
+    if (event.target.checked) {
       setShowAllSelected(true);
     } else {
       setShowAllSelected(false);
@@ -807,287 +923,441 @@ const ReviewDapps = () => {
   const handleWalletFilterChange = (selectedOption) => {
     setSelectedWallet(selectedOption);
   };
-  
+
   if (!api) {
     return <Spinner size="xl" />;
   }
 
   return (
-      <div>
-        <Card w="1300px" justifyContent="left">
-          <CardBody>
-            <Text fontWeight="bold">Advanced Search</Text>
-            <Box>
-              <Text>Search:</Text>
-              <input onFocus={onClear} value={query} onChange={handleKeyPress} type="search" style={{ border: '2px solid black', padding: '15px' }} />
-            </Box>
-            <FormControl>
-              <Checkbox isChecked={showAllSelected} onChange={handleShowUnchartedChange}>
-                Show All (including uncharted)
-              </Checkbox>
-            </FormControl>
-            <Button onClick={onRefresh}>Refresh</Button>
-            {/*<FormControl>*/}
-            {/*  <FormLabel>Filter by Blockchain:</FormLabel>*/}
-            {/*  <SelectImported*/}
-            {/*      name="blockchainFilter"*/}
-            {/*      options={blockchainsSupported}*/}
-            {/*      value={selectedBlockchain}*/}
-            {/*      onChange={handleBlockchainFilterChange}*/}
-            {/*      isClearable*/}
-            {/*      placeholder="Select a blockchain..."*/}
-            {/*  />*/}
-            {/*</FormControl>*/}
-          </CardBody>
-        </Card>
-        <Card w="1300px" justifyContent="left">
-          <CardBody>
-            <Modal isOpen={isOpen} onClose={onClose} size="xl">
-              <ModalHeader>
-                Review dApp
-                <ModalCloseButton />
-              </ModalHeader>
-              <ModalOverlay />
-              <ModalContent width="80%">
-                <Tabs index={tabIndex} onChange={handleTabChange}>
-                  <TabList>
-                    <Tab>Info</Tab>
-                    {/*<Tab>Reviews</Tab>*/}
-                    <Tab>Form</Tab>
-                    <Tab>Vote History</Tab>
-                  </TabList>
-                  <TabPanels>
-                    <TabPanel>
-                      <Card>
-                        <Box p={4}>
-                          <Box display="flex" alignItems="center">
-                            <Avatar src={image} size="xl" border="4px solid #000" />
-                            <Box ml={4}>
-                              <Button colorScheme="blue" size="lg" onClick={() => window.open(app, '_blank')}>
-                                Launch App
-                              </Button>
-                              <Heading as="h3" size="lg" fontWeight="bold">
-                                {name}
-                              </Heading>
-                            </Box>
-                          </Box>
-                          <Box mt={4}>
-                            <Box border="1px solid gray" borderRadius="md" p={2} mt={4}>
-                              <Text>
-                                <strong>App:</strong> {app}
-                              </Text>
-                              <Text>
-                                <strong>Homepage:</strong> {homepage}
-                              </Text>
-                              <Text>
-                                <strong>Description:</strong> {description}
-                              </Text>
-                            </Box>
-
-                            <Box border="1px solid gray" borderRadius="md" p={2} mt={4}>
-                              <Text fontWeight="bold">Blockchains Supported:</Text>
-                              {blockchainsSupported
-                                  ? blockchainsSupported.map((blockchain) => (
-                                      <Text key={blockchain?.value} pl={4}>
-                                        - {blockchain?.label}
-                                      </Text>
-                                  ))
-                                  : null}
-                              <Button size={'xs'} onClick={() => handleTabChange(1)}>
-                                edit
-                              </Button>
-                            </Box>
-
-                            <Box border="1px solid gray" borderRadius="md" p={2} mt={4}>
-                              <Text fontWeight="bold">Protocols Supported:</Text>
-                              {protocolsSupported
-                                  ? protocolsSupported.map((protocol) => (
-                                      <Text key={protocol.value} pl={4}>
-                                        - {protocol?.label}
-                                      </Text>
-                                  ))
-                                  : null}
-                              <Button size={'xs'} onClick={() => handleTabChange(1)}>
-                                edit
-                              </Button>
-                            </Box>
-
-                            <Box border="1px solid gray" borderRadius="md" p={2} mt={4}>
-                              <Text fontWeight="bold">Features Supported:</Text>
-                              {featuresSupported
-                                  ? featuresSupported.map((feature) => (
-                                      <Text key={feature.value} pl={4}>
-                                        - {feature.label}
-                                      </Text>
-                                  ))
-                                  : null}
-                              <Button size={'xs'} onClick={() => handleTabChange(1)}>
-                                edit
-                              </Button>
-                            </Box>
-
-                            <Box border="1px solid gray" borderRadius="md" p={2} mt={4}>
-                              <Text fontWeight="bold">Social Media:</Text>
-                              <Text>
-                                <strong>Twitter:</strong> {socialMedia.twitter}
-                              </Text>
-                              <Text>
-                                <strong>Telegram:</strong> {socialMedia.telegram}
-                              </Text>
-                              <Text>
-                                <strong>Github:</strong> {socialMedia.github}
-                              </Text>
-                              <Button size={'xs'} onClick={() => handleTabChange(1)}>
-                                edit
-                              </Button>
-                            </Box>
+    <div>
+      <Card w="1300px" justifyContent="left">
+        <CardBody>
+          <Text fontWeight="bold">Advanced Search</Text>
+          <Box>
+            <Text>Search:</Text>
+            <input
+              onFocus={onClear}
+              value={query}
+              onChange={handleKeyPress}
+              type="search"
+              style={{ border: "2px solid black", padding: "15px" }}
+            />
+          </Box>
+          <FormControl>
+            <Checkbox
+              isChecked={showAllSelected}
+              onChange={handleShowUnchartedChange}
+            >
+              Show All (including uncharted)
+            </Checkbox>
+          </FormControl>
+          <Button onClick={onRefresh}>Refresh</Button>
+          {/*<FormControl>*/}
+          {/*  <FormLabel>Filter by Blockchain:</FormLabel>*/}
+          {/*  <SelectImported*/}
+          {/*      name="blockchainFilter"*/}
+          {/*      options={blockchainsSupported}*/}
+          {/*      value={selectedBlockchain}*/}
+          {/*      onChange={handleBlockchainFilterChange}*/}
+          {/*      isClearable*/}
+          {/*      placeholder="Select a blockchain..."*/}
+          {/*  />*/}
+          {/*</FormControl>*/}
+        </CardBody>
+      </Card>
+      <Card w="1300px" justifyContent="left">
+        <CardBody>
+          <Modal isOpen={isOpen} onClose={onClose} size="xl">
+            <ModalHeader>
+              Review dApp
+              <ModalCloseButton />
+            </ModalHeader>
+            <ModalOverlay />
+            <ModalContent width="80%">
+              <Tabs index={tabIndex} onChange={handleTabChange}>
+                <TabList>
+                  <Tab>Info</Tab>
+                  {/*<Tab>Reviews</Tab>*/}
+                  <Tab>Form</Tab>
+                  <Tab>Vote History</Tab>
+                </TabList>
+                <TabPanels>
+                  <TabPanel>
+                    <Card>
+                      <Box p={4}>
+                        <Box display="flex" alignItems="center">
+                          <Avatar
+                            src={image}
+                            size="xl"
+                            border="4px solid #000"
+                          />
+                          <Box ml={4}>
+                            <Button
+                              colorScheme="blue"
+                              size="lg"
+                              onClick={() => window.open(app, "_blank")}
+                            >
+                              Launch App
+                            </Button>
+                            <Heading as="h3" size="lg" fontWeight="bold">
+                              {name}
+                            </Heading>
                           </Box>
                         </Box>
-                      </Card>
-                    </TabPanel>
-                    <TabPanel>
-                      <ModalHeader>Edit Entry</ModalHeader>
-                      <ModalCloseButton />
-                      <ModalBody>
-                        <FormControl isInvalid={isError}>
-                          <FormLabel>Name</FormLabel>
-                          <Input type="email" value={name} onChange={handleInputChangeName} />
-                          {!isError ? <FormHelperText>Enter the name of the app.</FormHelperText> : <FormErrorMessage>name is required.</FormErrorMessage>}
-                        </FormControl>
-                        <FormControl isInvalid={isError}>
-                          <FormLabel>Homepage URL</FormLabel>
-                          <Input type="email" value={homepage} onChange={handleInputChangeApp} />
-                          {!isError ? <FormHelperText>Homepage is the Landing, generally designed to be indexed by crawlers.</FormHelperText> : <FormErrorMessage>URL is required.</FormErrorMessage>}
-                        </FormControl>
-                        <FormControl isInvalid={isError}>
-                          <FormLabel>App URL</FormLabel>
-                          <Input type="email" value={app} onChange={handleInputChangeApp} />
-                          {!isError ? <FormHelperText>Enter the URL of the dapp application itself, generally app.serviceName*.com</FormHelperText> : <FormErrorMessage>URL is required.</FormErrorMessage>}
-                        </FormControl>
-                        <FormControl isInvalid={isError}>
-                          <div style={{ border: '1px solid #ccc', padding: '10px', marginTop: '10px' }}>
-                            {image && <img src={image} alt="Image Preview" style={{ width: '100px', height: '100px' }} />}
-                            <FormLabel>Image URL</FormLabel>
-                            <Input type="email" value={image} onChange={handleInputChangeImage} />
-                          </div>
-                          {!isError ? <FormHelperText>Enter the URL of the image for the Dapp. This MUST be a valid URL and not an encoding!</FormHelperText> : <FormErrorMessage>Image URL is required.</FormErrorMessage>}
-                        </FormControl>
-                        <FormControl isInvalid={isError}>
-                          <FormLabel>Dapp Description</FormLabel>
-                          <Textarea placeholder="This Dapp is great because it does....." value={description} onChange={handleInputChangeDescription} />
-                          {!isError ? <FormHelperText>Describe the Dapp in a short paragraph.</FormHelperText> : <FormErrorMessage>Description is required.</FormErrorMessage>}
-                        </FormControl>
-                        <FormControl isInvalid={isError}>
-                          Blockchains Supported By Dapp
-                          <SelectImported
-                              isMulti
-                              name="assets"
-                              options={blockchains}
-                              placeholder="ethereum... bitcoin... avalanche...."
-                              closeMenuOnSelect={true}
-                              value={blockchainsSupported}
-                              // components={{ Option: IconOption }}
-                              onChange={onSelectedBlockchains}
-                          ></SelectImported>
-                          <FormHelperText>Enter all the blockchains that the dapp supports.</FormHelperText>
-                        </FormControl>
-                        <FormControl isInvalid={isError}>
-                          <FormLabel>Protocols Supported</FormLabel>
-                          <SelectImported
-                              isMulti
-                              name="assets"
-                              options={protocols}
-                              placeholder="wallet-connect... wallet-connect-v2... REST...."
-                              closeMenuOnSelect={true}
-                              value={protocolsSupported}
-                              // components={{ Option: IconOption }}
-                              onChange={onSelectedProtocols}
-                          ></SelectImported>
-                        </FormControl>
-                        <FormControl isInvalid={isError}>
-                          <FormLabel>Features Supported</FormLabel>
-                          <SelectImported
-                              isMulti
-                              name="features"
-                              options={features}
-                              placeholder="basic-transfers... defi-earn...."
-                              closeMenuOnSelect={true}
-                              // components={{ Option: IconOption }}
-                              onChange={onSelectedFeatures}
-                          ></SelectImported>
-                        </FormControl>
-                        <FormControl isInvalid={isError}>
-                          <FormLabel>Social Media</FormLabel>
-                          <InputGroup>
-                            <InputLeftAddon children="Twitter" />
-                            <Input type="text" name="twitter" value={socialMedia.twitter} onChange={handleSocialMediaChange} />
-                          </InputGroup>
-                        </FormControl>
+                        <Box mt={4}>
+                          <Box
+                            border="1px solid gray"
+                            borderRadius="md"
+                            p={2}
+                            mt={4}
+                          >
+                            <Text>
+                              <strong>App:</strong> {app}
+                            </Text>
+                            <Text>
+                              <strong>Homepage:</strong> {homepage}
+                            </Text>
+                            <Text>
+                              <strong>Description:</strong> {description}
+                            </Text>
+                          </Box>
 
-                        <FormControl isInvalid={isError}>
-                          <FormLabel>Social Media</FormLabel>
-                          <InputGroup>
-                            <InputLeftAddon children="Telegram" />
-                            <Input type="text" name="telegram" value={socialMedia.telegram} onChange={handleSocialMediaChange} />
-                          </InputGroup>
-                        </FormControl>
+                          <Box
+                            border="1px solid gray"
+                            borderRadius="md"
+                            p={2}
+                            mt={4}
+                          >
+                            <Text fontWeight="bold">
+                              Blockchains Supported:
+                            </Text>
+                            {blockchainsSupported
+                              ? blockchainsSupported.map((blockchain) => (
+                                  <Text key={blockchain?.value} pl={4}>
+                                    - {blockchain?.label}
+                                  </Text>
+                                ))
+                              : null}
+                            <Button
+                              size={"xs"}
+                              onClick={() => handleTabChange(1)}
+                            >
+                              edit
+                            </Button>
+                          </Box>
 
-                        <FormControl isInvalid={isError}>
-                          <FormLabel>Social Media</FormLabel>
-                          <InputGroup>
-                            <InputLeftAddon children="GitHub" />
-                            <Input type="text" name="github" value={socialMedia.github} onChange={handleSocialMediaChange} />
-                          </InputGroup>
-                        </FormControl>
-                      </ModalBody>
+                          <Box
+                            border="1px solid gray"
+                            borderRadius="md"
+                            p={2}
+                            mt={4}
+                          >
+                            <Text fontWeight="bold">Protocols Supported:</Text>
+                            {protocolsSupported
+                              ? protocolsSupported.map((protocol) => (
+                                  <Text key={protocol.value} pl={4}>
+                                    - {protocol?.label}
+                                  </Text>
+                                ))
+                              : null}
+                            <Button
+                              size={"xs"}
+                              onClick={() => handleTabChange(1)}
+                            >
+                              edit
+                            </Button>
+                          </Box>
 
-                      <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={onClose}>
-                          Close
-                        </Button>
-                        <Button onClick={onSubmitEdit} variant="green">
-                          Submit changes
-                        </Button>
-                      </ModalFooter>
-                    </TabPanel>
-                    <TabPanel>
-                      <FormControl>
-                        <table>
-                          <UpVotesTable />
-                          <DownVotesTable />
-                        </table>
+                          <Box
+                            border="1px solid gray"
+                            borderRadius="md"
+                            p={2}
+                            mt={4}
+                          >
+                            <Text fontWeight="bold">Features Supported:</Text>
+                            {featuresSupported
+                              ? featuresSupported.map((feature) => (
+                                  <Text key={feature.value} pl={4}>
+                                    - {feature.label}
+                                  </Text>
+                                ))
+                              : null}
+                            <Button
+                              size={"xs"}
+                              onClick={() => handleTabChange(1)}
+                            >
+                              edit
+                            </Button>
+                          </Box>
+
+                          <Box
+                            border="1px solid gray"
+                            borderRadius="md"
+                            p={2}
+                            mt={4}
+                          >
+                            <Text fontWeight="bold">Social Media:</Text>
+                            <Text>
+                              <strong>Twitter:</strong> {socialMedia.twitter}
+                            </Text>
+                            <Text>
+                              <strong>Telegram:</strong> {socialMedia.telegram}
+                            </Text>
+                            <Text>
+                              <strong>Github:</strong> {socialMedia.github}
+                            </Text>
+                            <Button
+                              size={"xs"}
+                              onClick={() => handleTabChange(1)}
+                            >
+                              edit
+                            </Button>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Card>
+                  </TabPanel>
+                  <TabPanel>
+                    <ModalHeader>Edit Entry</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      <FormControl isInvalid={isError}>
+                        <FormLabel>Name</FormLabel>
+                        <Input
+                          type="email"
+                          value={name}
+                          onChange={handleInputChangeName}
+                        />
+                        {!isError ? (
+                          <FormHelperText>
+                            Enter the name of the app.
+                          </FormHelperText>
+                        ) : (
+                          <FormErrorMessage>name is required.</FormErrorMessage>
+                        )}
                       </FormControl>
-                    </TabPanel>
-                  </TabPanels>
-                </Tabs>
-              </ModalContent>
-            </Modal>
-            <div className="p-2">
-              <table>
-                <thead>
+                      <FormControl isInvalid={isError}>
+                        <FormLabel>Homepage URL</FormLabel>
+                        <Input
+                          type="email"
+                          value={homepage}
+                          onChange={handleInputChangeApp}
+                        />
+                        {!isError ? (
+                          <FormHelperText>
+                            Homepage is the Landing, generally designed to be
+                            indexed by crawlers.
+                          </FormHelperText>
+                        ) : (
+                          <FormErrorMessage>URL is required.</FormErrorMessage>
+                        )}
+                      </FormControl>
+                      <FormControl isInvalid={isError}>
+                        <FormLabel>App URL</FormLabel>
+                        <Input
+                          type="email"
+                          value={app}
+                          onChange={handleInputChangeApp}
+                        />
+                        {!isError ? (
+                          <FormHelperText>
+                            Enter the URL of the dapp application itself,
+                            generally app.serviceName*.com
+                          </FormHelperText>
+                        ) : (
+                          <FormErrorMessage>URL is required.</FormErrorMessage>
+                        )}
+                      </FormControl>
+                      <FormControl isInvalid={isError}>
+                        <div
+                          style={{
+                            border: "1px solid #ccc",
+                            padding: "10px",
+                            marginTop: "10px",
+                          }}
+                        >
+                          {image && (
+                            <img
+                              src={image}
+                              alt="Image Preview"
+                              style={{ width: "100px", height: "100px" }}
+                            />
+                          )}
+                          <FormLabel>Image URL</FormLabel>
+                          <Input
+                            type="email"
+                            value={image}
+                            onChange={handleInputChangeImage}
+                          />
+                        </div>
+                        {!isError ? (
+                          <FormHelperText>
+                            Enter the URL of the image for the Dapp. This MUST
+                            be a valid URL and not an encoding!
+                          </FormHelperText>
+                        ) : (
+                          <FormErrorMessage>
+                            Image URL is required.
+                          </FormErrorMessage>
+                        )}
+                      </FormControl>
+                      <FormControl isInvalid={isError}>
+                        <FormLabel>Dapp Description</FormLabel>
+                        <Textarea
+                          placeholder="This Dapp is great because it does....."
+                          value={description}
+                          onChange={handleInputChangeDescription}
+                        />
+                        {!isError ? (
+                          <FormHelperText>
+                            Describe the Dapp in a short paragraph.
+                          </FormHelperText>
+                        ) : (
+                          <FormErrorMessage>
+                            Description is required.
+                          </FormErrorMessage>
+                        )}
+                      </FormControl>
+                      <FormControl isInvalid={isError}>
+                        Blockchains Supported By Dapp
+                        <SelectImported
+                          isMulti
+                          name="assets"
+                          options={blockchains}
+                          placeholder="ethereum... bitcoin... avalanche...."
+                          closeMenuOnSelect={true}
+                          value={blockchainsSupported}
+                          // components={{ Option: IconOption }}
+                          onChange={onSelectedBlockchains}
+                        ></SelectImported>
+                        <FormHelperText>
+                          Enter all the blockchains that the dapp supports.
+                        </FormHelperText>
+                      </FormControl>
+                      <FormControl isInvalid={isError}>
+                        <FormLabel>Protocols Supported</FormLabel>
+                        <SelectImported
+                          isMulti
+                          name="assets"
+                          options={protocols}
+                          placeholder="wallet-connect... wallet-connect-v2... REST...."
+                          closeMenuOnSelect={true}
+                          value={protocolsSupported}
+                          // components={{ Option: IconOption }}
+                          onChange={onSelectedProtocols}
+                        ></SelectImported>
+                      </FormControl>
+                      <FormControl isInvalid={isError}>
+                        <FormLabel>Features Supported</FormLabel>
+                        <SelectImported
+                          isMulti
+                          name="features"
+                          options={features}
+                          placeholder="basic-transfers... defi-earn...."
+                          closeMenuOnSelect={true}
+                          // components={{ Option: IconOption }}
+                          onChange={onSelectedFeatures}
+                        ></SelectImported>
+                      </FormControl>
+                      <FormControl isInvalid={isError}>
+                        <FormLabel>Social Media</FormLabel>
+                        <InputGroup>
+                          <InputLeftAddon children="Twitter" />
+                          <Input
+                            type="text"
+                            name="twitter"
+                            value={socialMedia.twitter}
+                            onChange={handleSocialMediaChange}
+                          />
+                        </InputGroup>
+                      </FormControl>
+
+                      <FormControl isInvalid={isError}>
+                        <FormLabel>Social Media</FormLabel>
+                        <InputGroup>
+                          <InputLeftAddon children="Telegram" />
+                          <Input
+                            type="text"
+                            name="telegram"
+                            value={socialMedia.telegram}
+                            onChange={handleSocialMediaChange}
+                          />
+                        </InputGroup>
+                      </FormControl>
+
+                      <FormControl isInvalid={isError}>
+                        <FormLabel>Social Media</FormLabel>
+                        <InputGroup>
+                          <InputLeftAddon children="GitHub" />
+                          <Input
+                            type="text"
+                            name="github"
+                            value={socialMedia.github}
+                            onChange={handleSocialMediaChange}
+                          />
+                        </InputGroup>
+                      </FormControl>
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button colorScheme="blue" mr={3} onClick={onClose}>
+                        Close
+                      </Button>
+                      <Button onClick={onSubmitEdit} variant="green">
+                        Submit changes
+                      </Button>
+                    </ModalFooter>
+                  </TabPanel>
+                  <TabPanel>
+                    <FormControl>
+                      <table>
+                        <UpVotesTable />
+                        <DownVotesTable />
+                      </table>
+                    </FormControl>
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+            </ModalContent>
+          </Modal>
+          <div className="p-2">
+            <table>
+              <thead>
                 {table.getHeaderGroups().map((headerGroup) => (
-                    <tr key={headerGroup.id}>
-                      {headerGroup.headers.map((header) => (
-                          <th key={header.id}>{header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}</th>
-                      ))}
-                    </tr>
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <th key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </th>
+                    ))}
+                  </tr>
                 ))}
-                </thead>
-                <tbody>
+              </thead>
+              <tbody>
                 {table.getRowModel().rows.map((row) => (
-                    <tr key={row.id}>
-                      {row.getVisibleCells().map((cell) => (
-                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                      ))}
-                    </tr>
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
                 ))}
-                </tbody>
-              </table>
-              <div className="h-4" />
-            </div>
-          </CardBody>
-        </Card>
-      </div>
+              </tbody>
+            </table>
+            <div className="h-4" />
+          </div>
+        </CardBody>
+      </Card>
+    </div>
   );
 };
 

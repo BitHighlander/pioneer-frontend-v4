@@ -10,7 +10,6 @@ import {
   TabPanels,
   FormControl,
   FormLabel,
-  FormErrorMessage,
   FormHelperText,
   Input,
   Textarea,
@@ -32,6 +31,7 @@ import {
   InputLeftAddon,
 } from "@chakra-ui/react";
 import { Select as SelectImported } from "chakra-react-select";
+// @ts-ignore
 import { usePioneer } from "pioneer-react";
 import React, { useEffect, useState } from "react";
 // import { protocols, features } from 'lib/context/tools/Constants';

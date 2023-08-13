@@ -1,8 +1,19 @@
-import { Box, Heading, Button, Card, CardBody, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
-import React from 'react';
-import AssetsList from './components/AssetList';
-import AssetsDiscovered from './components/AssetsDiscovered';
-import SubmitAssets from './components/ChartAsset';
+import {
+  Box,
+  Heading,
+  Button,
+  Card,
+  CardBody,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from "@chakra-ui/react";
+import React from "react";
+import AssetsList from "./components/AssetList";
+import AssetsDiscovered from "./components/AssetsDiscovered";
+import SubmitAssets from "./components/ChartAsset";
 const Header = () => (
   <Box textAlign="center">
     <Heading>Assets</Heading>
